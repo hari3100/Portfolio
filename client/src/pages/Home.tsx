@@ -242,20 +242,19 @@ export function Home() {
                 whileHover={{ scale: 1.02 }}
               >
                 <Card className="shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  {post.imageUrl && (
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={post.imageUrl}
-                        alt={post.title}
-                        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={post.imageUrl || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400'}
+                      alt={post.title}
+                      className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    <div className="absolute top-4 right-4">
+                      <div className="bg-black/50 rounded-full p-2">
+                        <ExternalLink className="w-4 h-4 text-white" />
+                      </div>
                     </div>
-                  )}
+                  </div>
                   <CardContent className="p-6">
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
                       {post.title}
@@ -263,10 +262,7 @@ export function Home() {
                     <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
                       {post.content}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {new Date(post.publishedAt).toLocaleDateString()}
-                      </div>
+                    <div className="flex items-center justify-end">
                       <Button
                         variant="ghost"
                         size="sm"

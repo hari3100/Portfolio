@@ -247,6 +247,12 @@ export function Home() {
                       src={post.imageUrl || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400'}
                       alt={post.title}
                       className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                      onLoad={() => console.log('LinkedIn image loaded successfully:', post.imageUrl)}
+                      onError={(e) => {
+                        console.log('LinkedIn image failed to load:', post.imageUrl);
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400';
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     <div className="absolute top-4 right-4">

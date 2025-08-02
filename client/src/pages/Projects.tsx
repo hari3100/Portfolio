@@ -41,10 +41,11 @@ export function Projects() {
       description: project.description,
       html_url: project.htmlUrl,
       homepage: null,
+      owner: { login: 'hari3100' },
       language: project.language,
       stargazers_count: project.stargazersCount || 0,
       forks_count: project.forksCount || 0,
-      updated_at: project.createdAt?.toISOString() || new Date().toISOString(),
+      updated_at: project.createdAt ? new Date(project.createdAt).toISOString() : new Date().toISOString(),
       topics: []
     };
     setSelectedRepo(repoData);
@@ -128,10 +129,11 @@ export function Projects() {
                       description: project.description,
                       html_url: project.htmlUrl,
                       homepage: null,
+                      owner: { login: 'hari3100' },
                       language: project.language,
                       stargazers_count: project.stargazersCount || 0,
                       forks_count: project.forksCount || 0,
-                      updated_at: project.createdAt?.toISOString() || new Date().toISOString(),
+                      updated_at: project.createdAt ? new Date(project.createdAt).toISOString() : new Date().toISOString(),
                       topics: []
                     }} onShowMore={() => handleShowMore(project)} />
                   </motion.div>

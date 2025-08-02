@@ -5,7 +5,7 @@ import type {
   User, InsertUser, Project, InsertProject, ContactMessage, InsertContactMessage,
   Certification, InsertCertification, LinkedinPost, InsertLinkedinPost,
   Skill, InsertSkill, Blog, InsertBlog, ContactInfo, InsertContactInfo,
-  Education, InsertEducation
+  Education, InsertEducation, SelectedProject, InsertSelectedProject
 } from '@shared/schema';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -495,6 +495,56 @@ export class FileStorage implements IStorage {
     
     if (filtered.length < initialLength) {
       await this.writeJsonFile('education.json', filtered);
+      return true;
+    }
+    return false;
+  }
+
+  // Selected Project methods
+  async getSelectedProjects(): Promise<SelectedProject[]> {
+    const projects = await this.readJsonFile<SelectedProject[]>('selectedProjects.json', []);
+    return projects.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  }
+
+  async createSelectedProject(insertProject: InsertSelectedProject): Promise<SelectedProject> {
+    const projects = await this.getSelectedProjects();
+    const newId = Math.max(0, ...projects.map(p => p.id)) + 1;
+    const project: SelectedProject = {
+      ...insertProject,
+      description: insertProject.description ?? null,
+      customDescription: insertProject.customDescription ?? null,
+      imageUrl: insertProject.imageUrl ?? null,
+      language: insertProject.language ?? null,
+      stargazersCount: insertProject.stargazersCount ?? 0,
+      forksCount: insertProject.forksCount ?? 0,
+      isSelected: insertProject.isSelected ?? true,
+      featured: insertProject.featured ?? false,
+      displayOrder: insertProject.displayOrder ?? projects.length,
+      id: newId,
+      createdAt: new Date()
+    };
+    projects.push(project);
+    await this.writeJsonFile('selectedProjects.json', projects);
+    return project;
+  }
+
+  async updateSelectedProject(id: number, updates: Partial<InsertSelectedProject>): Promise<SelectedProject | undefined> {
+    const projects = await this.getSelectedProjects();
+    const index = projects.findIndex(p => p.id === id);
+    if (index === -1) return undefined;
+
+    projects[index] = { ...projects[index], ...updates };
+    await this.writeJsonFile('selectedProjects.json', projects);
+    return projects[index];
+  }
+
+  async deleteSelectedProject(id: number): Promise<boolean> {
+    const projects = await this.getSelectedProjects();
+    const initialLength = projects.length;
+    const filtered = projects.filter(p => p.id !== id);
+    
+    if (filtered.length < initialLength) {
+      await this.writeJsonFile('selectedProjects.json', filtered);
       return true;
     }
     return false;

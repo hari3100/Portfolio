@@ -4,35 +4,55 @@ import { Button } from '@/components/ui/button';
 import { ProjectCard } from '@/components/ProjectCard';
 import { ProjectModal } from '@/components/ProjectModal';
 import { AdminModal } from '@/components/AdminModal';
-import { useGitHubRepos } from '@/hooks/useGitHub';
-import { categorizeRepo } from '@/lib/github';
+import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import type { GitHubRepo } from '@/types';
-
-const filters = [
-  { id: 'all', label: 'All Projects', category: 'all' },
-  { id: 'ml', label: 'Machine Learning', category: 'ml' },
-  { id: 'web', label: 'Web Development', category: 'web' },
-  { id: 'data', label: 'Data Analysis', category: 'data' },
-];
+import type { SelectedProject } from '@shared/schema';
 
 export function Projects() {
-  const [selectedFilter, setSelectedFilter] = useState('all');
-  const [selectedRepo, setSelectedRepo] = useState<GitHubRepo | null>(null);
+  const [selectedRepo, setSelectedRepo] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [visibleProjects, setVisibleProjects] = useState(6);
 
-  const { data: repos, isLoading, error } = useGitHubRepos('hari3100');
+  const { data: selectedProjects, isLoading, error } = useQuery({
+    queryKey: ['/api/selected-projects']
+  });
 
-  const filteredRepos = repos?.filter(repo => {
-    if (selectedFilter === 'all') return true;
-    return categorizeRepo(repo) === selectedFilter;
+  // Sort projects: featured first, then by display order, then by name
+  const sortedProjects = (selectedProjects as SelectedProject[])?.sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    if (a.displayOrder !== null && b.displayOrder !== null) {
+      return a.displayOrder - b.displayOrder;
+    }
+    return a.name.localeCompare(b.name);
   }) || [];
 
-  const handleShowMore = (repo: GitHubRepo) => {
-    setSelectedRepo(repo);
+  const displayedProjects = sortedProjects.slice(0, visibleProjects);
+  const hasMoreProjects = sortedProjects.length > visibleProjects;
+
+  const handleShowMore = (project: SelectedProject) => {
+    // Convert SelectedProject to GitHubRepo format for modal compatibility
+    const repoData = {
+      id: project.githubRepoId,
+      name: project.name,
+      description: project.description,
+      html_url: project.htmlUrl,
+      homepage: null,
+      language: project.language,
+      stargazers_count: project.stargazersCount || 0,
+      forks_count: project.forksCount || 0,
+      updated_at: project.createdAt?.toISOString() || new Date().toISOString(),
+      topics: []
+    };
+    setSelectedRepo(repoData);
     setIsModalOpen(true);
+  };
+
+  const handleLoadMore = () => {
+    setVisibleProjects(prev => prev + 6);
   };
 
   const handleCloseModal = () => {
@@ -71,29 +91,12 @@ export function Projects() {
               Projects
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              A showcase of my latest work in data science, machine learning, and software development. 
-              All projects are automatically synced from my GitHub repository.
+              A curated showcase of my latest work in data science, machine learning, and software development. 
+              Selected projects from my GitHub repositories.
             </p>
           </motion.div>
           
-          {/* Project Filter */}
-          <motion.div 
-            className="flex flex-wrap justify-center gap-3 mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            {filters.map((filter) => (
-              <Button
-                key={filter.id}
-                variant={selectedFilter === filter.id ? "default" : "outline"}
-                onClick={() => setSelectedFilter(filter.id)}
-                className="transform hover:scale-105 transition-all duration-300"
-              >
-                {filter.label}
-              </Button>
-            ))}
-          </motion.div>
+
           
           {/* Loading State */}
           {isLoading && (
@@ -110,16 +113,27 @@ export function Projects() {
               layout
             >
               <AnimatePresence>
-                {filteredRepos.map((repo) => (
+                {displayedProjects.map((project) => (
                   <motion.div
-                    key={repo.id}
+                    key={project.id}
                     layout
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <ProjectCard repo={repo} onShowMore={handleShowMore} />
+                    <ProjectCard repo={{
+                      id: project.githubRepoId,
+                      name: project.name,
+                      description: project.description,
+                      html_url: project.htmlUrl,
+                      homepage: null,
+                      language: project.language,
+                      stargazers_count: project.stargazersCount || 0,
+                      forks_count: project.forksCount || 0,
+                      updated_at: project.createdAt?.toISOString() || new Date().toISOString(),
+                      topics: []
+                    }} onShowMore={() => handleShowMore(project)} />
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -127,20 +141,20 @@ export function Projects() {
           )}
           
           {/* Empty State */}
-          {!isLoading && filteredRepos.length === 0 && (
+          {!isLoading && displayedProjects.length === 0 && (
             <motion.div 
               className="text-center py-20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
               <p className="text-xl text-gray-600 dark:text-gray-300">
-                No projects found for the selected filter.
+                No projects have been selected yet. Check back soon for updates!
               </p>
             </motion.div>
           )}
           
           {/* Load More Button */}
-          {!isLoading && filteredRepos.length > 0 && (
+          {!isLoading && hasMoreProjects && (
             <motion.div 
               className="text-center mt-12"
               initial={{ opacity: 0, y: 20 }}
@@ -149,9 +163,10 @@ export function Projects() {
             >
               <Button 
                 size="lg"
+                onClick={handleLoadMore}
                 className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                Load More Projects
+                Load More Projects ({sortedProjects.length - visibleProjects} remaining)
               </Button>
             </motion.div>
           )}

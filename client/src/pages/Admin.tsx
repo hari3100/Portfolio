@@ -13,7 +13,7 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 import { AdminModal } from '@/components/AdminModal';
 import { Plus, Edit, Trash2, Save, Eye, Settings, Link, Calendar, BookOpen, Mail, Github, Linkedin } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import type { Certification, Skill, LinkedinPost, Project, Blog, ContactInfo, Education } from '@shared/schema';
+import type { Certification, Skill, LinkedinPost, Project, Blog, ContactInfo, Education, SelectedProject } from '@shared/schema';
 
 export function Admin() {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -22,6 +22,9 @@ export function Admin() {
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [editingLinkedinPost, setEditingLinkedinPost] = useState<LinkedinPost | null>(null);
   const [editingEducation, setEditingEducation] = useState<Education | null>(null);
+  const [githubUsername, setGithubUsername] = useState('hari3100');
+  const [githubRepos, setGithubRepos] = useState<any[]>([]);
+  const [loadingRepos, setLoadingRepos] = useState(false);
   const { toast } = useToast();
 
   // Blog form state
@@ -79,6 +82,11 @@ export function Admin() {
 
   const { data: education } = useQuery({
     queryKey: ['/api/education'],
+    enabled: isAdminAuthenticated
+  });
+
+  const { data: selectedProjects } = useQuery({
+    queryKey: ['/api/selected-projects'],
     enabled: isAdminAuthenticated
   });
 
@@ -243,6 +251,41 @@ export function Admin() {
     }
   });
 
+  // Selected Project mutations
+  const createSelectedProjectMutation = useMutation({
+    mutationFn: (project: any) => apiRequest('POST', '/api/selected-projects', project, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/selected-projects'] });
+      toast({ title: "Success", description: "Project added successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to add project", variant: "destructive" });
+    }
+  });
+
+  const updateSelectedProjectMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: any }) => 
+      apiRequest('PUT', `/api/selected-projects/${id}`, data, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/selected-projects'] });
+      toast({ title: "Success", description: "Project updated successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to update project", variant: "destructive" });
+    }
+  });
+
+  const deleteSelectedProjectMutation = useMutation({
+    mutationFn: (id: number) => apiRequest('DELETE', `/api/selected-projects/${id}`, undefined, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/selected-projects'] });
+      toast({ title: "Success", description: "Project deleted successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to delete project", variant: "destructive" });
+    }
+  });
+
   // Check authentication on mount
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -327,6 +370,57 @@ export function Admin() {
     });
   };
 
+  const fetchGithubRepos = async () => {
+    if (!githubUsername.trim()) {
+      toast({ title: "Error", description: "Please enter a GitHub username", variant: "destructive" });
+      return;
+    }
+
+    setLoadingRepos(true);
+    try {
+      const response = await fetch(`/api/github/repos/${githubUsername}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch repositories');
+      }
+      const repos = await response.json();
+      setGithubRepos(repos);
+      toast({ title: "Success", description: `Found ${repos.length} repositories` });
+    } catch (error) {
+      console.error('Error fetching repos:', error);
+      toast({ title: "Error", description: "Failed to fetch repositories", variant: "destructive" });
+    } finally {
+      setLoadingRepos(false);
+    }
+  };
+
+  const addProjectToSelected = (repo: any) => {
+    const projectData = {
+      githubRepoId: repo.id,
+      name: repo.name,
+      description: repo.description || '',
+      htmlUrl: repo.html_url,
+      language: repo.language || '',
+      stargazersCount: repo.stargazers_count || 0,
+      forksCount: repo.forks_count || 0,
+      isSelected: true,
+      featured: false
+    };
+    createSelectedProjectMutation.mutate(projectData);
+  };
+
+  const handleDeleteSelectedProject = (id: number) => {
+    if (confirm('Are you sure you want to remove this project from selection?')) {
+      deleteSelectedProjectMutation.mutate(id);
+    }
+  };
+
+  const toggleProjectFeatured = (project: SelectedProject) => {
+    updateSelectedProjectMutation.mutate({
+      id: project.id,
+      data: { featured: !project.featured }
+    });
+  };
+
   if (!isAdminAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 pt-20">
@@ -383,10 +477,11 @@ export function Admin() {
         </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="blogs">Blog Management</TabsTrigger>
             <TabsTrigger value="linkedin">LinkedIn Posts</TabsTrigger>
             <TabsTrigger value="education">Education</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="contact">Contact Info</TabsTrigger>
             <TabsTrigger value="skills">Skills</TabsTrigger>
             <TabsTrigger value="certifications">Certifications</TabsTrigger>
@@ -753,6 +848,137 @@ export function Admin() {
                     )) || (
                       <p className="text-gray-500 dark:text-gray-400 text-center py-8">
                         No education entries yet. Add your first education!
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Projects Tab */}
+          <TabsContent value="projects" className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* GitHub Repository Fetcher */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Github className="w-5 h-5 mr-2" />
+                    Fetch GitHub Repositories
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="githubUsername">GitHub Username</Label>
+                      <Input
+                        id="githubUsername"
+                        value={githubUsername}
+                        onChange={(e) => setGithubUsername(e.target.value)}
+                        placeholder="Enter GitHub username"
+                        onKeyDown={(e) => e.key === 'Enter' && fetchGithubRepos()}
+                      />
+                    </div>
+                    <Button onClick={fetchGithubRepos} disabled={loadingRepos}>
+                      {loadingRepos ? 'Fetching...' : 'Fetch Repositories'}
+                    </Button>
+                    
+                    {githubRepos.length > 0 && (
+                      <div className="mt-4 max-h-64 overflow-y-auto space-y-2">
+                        <h4 className="font-semibold">Available Repositories ({githubRepos.length})</h4>
+                        {githubRepos.map((repo) => {
+                          const isAlreadySelected = (selectedProjects as SelectedProject[])?.some(
+                            p => p.githubRepoId === repo.id
+                          );
+                          return (
+                            <div key={repo.id} className="flex items-center justify-between p-2 border rounded">
+                              <div className="flex-1">
+                                <p className="font-medium text-sm">{repo.name}</p>
+                                <p className="text-xs text-gray-500">
+                                  {repo.language} • ⭐ {repo.stargazers_count} • 🍴 {repo.forks_count}
+                                </p>
+                                {repo.description && (
+                                  <p className="text-xs text-gray-600 mt-1 truncate">
+                                    {repo.description}
+                                  </p>
+                                )}
+                              </div>
+                              <Button
+                                size="sm"
+                                variant={isAlreadySelected ? "secondary" : "default"}
+                                onClick={() => addProjectToSelected(repo)}
+                                disabled={isAlreadySelected || createSelectedProjectMutation.isPending}
+                              >
+                                {isAlreadySelected ? 'Added' : 'Add'}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Selected Projects Management */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2" />
+                    Selected Projects ({(selectedProjects as SelectedProject[])?.length || 0})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {(selectedProjects as SelectedProject[])?.map((project) => (
+                      <div key={project.id} className="p-4 border rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white">
+                              {project.name}
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-300 text-sm">
+                              {project.description || 'No description'}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              {project.language} • ⭐ {project.stargazersCount} • 🍴 {project.forksCount}
+                            </p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant={project.featured ? 'default' : 'outline'}>
+                                {project.featured ? 'Featured' : 'Standard'}
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => window.open(project.htmlUrl, '_blank')}
+                              >
+                                <Link className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => toggleProjectFeatured(project)}
+                              disabled={updateSelectedProjectMutation.isPending}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteSelectedProject(project.id)}
+                              disabled={deleteSelectedProjectMutation.isPending}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )) || (
+                      <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+                        No projects selected yet. Fetch repositories from GitHub to add projects.
                       </p>
                     )}
                   </div>

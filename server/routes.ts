@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactMessageSchema, insertProjectSchema, insertCertificationSchema, insertLinkedinPostSchema, insertSkillSchema, insertBlogSchema, insertContactInfoSchema, insertEducationSchema } from "@shared/schema";
+import { insertContactMessageSchema, insertProjectSchema, insertCertificationSchema, insertLinkedinPostSchema, insertSkillSchema, insertBlogSchema, insertContactInfoSchema, insertEducationSchema, insertSelectedProjectSchema, type SelectedProject } from "@shared/schema";
 import multer from "multer";
 import path from "path";
 
@@ -584,6 +584,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Delete education error:", error);
       res.status(500).json({ error: "Failed to delete education" });
+    }
+  });
+
+  // Selected Projects API
+  app.get("/api/selected-projects", async (req, res) => {
+    try {
+      const projects = await storage.getSelectedProjects();
+      res.json(projects);
+    } catch (error) {
+      console.error("Get selected projects error:", error);
+      res.status(500).json({ error: "Failed to fetch selected projects" });
+    }
+  });
+
+  app.post("/api/selected-projects", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const validatedData = insertSelectedProjectSchema.parse(req.body);
+      const project = await storage.createSelectedProject(validatedData);
+      res.json(project);
+    } catch (error) {
+      console.error("Create selected project error:", error);
+      res.status(400).json({ error: "Invalid project data" });
+    }
+  });
+
+  app.put("/api/selected-projects/:id", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const project = await storage.updateSelectedProject(id, updates);
+      
+      if (!project) {
+        return res.status(404).json({ error: "Selected project not found" });
+      }
+      
+      res.json(project);
+    } catch (error) {
+      console.error("Update selected project error:", error);
+      res.status(400).json({ error: "Invalid project data" });
+    }
+  });
+
+  app.delete("/api/selected-projects/:id", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deleteSelectedProject(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ error: "Selected project not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete selected project error:", error);
+      res.status(500).json({ error: "Failed to delete selected project" });
     }
   });
 

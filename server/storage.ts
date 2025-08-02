@@ -1,4 +1,4 @@
-import { users, projects, contactMessages, certifications, linkedinPosts, skills, blogs, contactInfo, education, type User, type InsertUser, type Project, type InsertProject, type ContactMessage, type InsertContactMessage, type Certification, type InsertCertification, type LinkedinPost, type InsertLinkedinPost, type Skill, type InsertSkill, type Blog, type InsertBlog, type ContactInfo, type InsertContactInfo, type Education, type InsertEducation } from "@shared/schema";
+import { users, projects, contactMessages, certifications, linkedinPosts, skills, blogs, contactInfo, education, selectedProjects, type User, type InsertUser, type Project, type InsertProject, type ContactMessage, type InsertContactMessage, type Certification, type InsertCertification, type LinkedinPost, type InsertLinkedinPost, type Skill, type InsertSkill, type Blog, type InsertBlog, type ContactInfo, type InsertContactInfo, type Education, type InsertEducation, type SelectedProject, type InsertSelectedProject } from "@shared/schema";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -45,6 +45,11 @@ export interface IStorage {
   createEducation(education: InsertEducation): Promise<Education>;
   updateEducation(id: number, updates: Partial<InsertEducation>): Promise<Education | undefined>;
   deleteEducation(id: number): Promise<boolean>;
+
+  getSelectedProjects(): Promise<SelectedProject[]>;
+  createSelectedProject(project: InsertSelectedProject): Promise<SelectedProject>;
+  updateSelectedProject(id: number, updates: Partial<InsertSelectedProject>): Promise<SelectedProject | undefined>;
+  deleteSelectedProject(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {

@@ -149,6 +149,29 @@ export const insertEducationSchema = createInsertSchema(education).omit({
   createdAt: true,
 });
 
+// Selected Projects table for file-based storage
+export const selectedProjects = pgTable("selected_projects", {
+  id: serial("id").primaryKey(),
+  githubRepoId: integer("github_repo_id").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  htmlUrl: text("html_url").notNull(),
+  language: text("language"),
+  stargazersCount: integer("stargazers_count").default(0),
+  forksCount: integer("forks_count").default(0),
+  isSelected: boolean("is_selected").default(true),
+  customDescription: text("custom_description"),
+  imageUrl: text("image_url"),
+  featured: boolean("featured").default(false),
+  displayOrder: integer("display_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertSelectedProjectSchema = createInsertSchema(selectedProjects).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Project = typeof projects.$inferSelect;
@@ -167,3 +190,5 @@ export type ContactInfo = typeof contactInfo.$inferSelect;
 export type InsertContactInfo = z.infer<typeof insertContactInfoSchema>;
 export type Education = typeof education.$inferSelect;
 export type InsertEducation = z.infer<typeof insertEducationSchema>;
+export type SelectedProject = typeof selectedProjects.$inferSelect;
+export type InsertSelectedProject = z.infer<typeof insertSelectedProjectSchema>;

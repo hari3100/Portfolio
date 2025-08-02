@@ -53,10 +53,7 @@ export function Admin() {
     featured: false
   });
   
-  // LinkedIn image upload state
-  const [linkedinImageUploadMethod, setLinkedinImageUploadMethod] = useState<'url' | 'file'>('url');
-  const [linkedinImageFile, setLinkedinImageFile] = useState<File | null>(null);
-  const [uploadingLinkedinImage, setUploadingLinkedinImage] = useState(false);
+
 
   // Education form state
   const [educationForm, setEducationForm] = useState({
@@ -336,46 +333,12 @@ export function Admin() {
     }
   };
 
-  const handleLinkedinSubmit = async (e: React.FormEvent) => {
+  const handleLinkedinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    let finalForm = { ...linkedinForm };
-    
-    if (linkedinImageUploadMethod === 'file' && linkedinImageFile) {
-      setUploadingLinkedinImage(true);
-      try {
-        const formData = new FormData();
-        formData.append('image', linkedinImageFile);
-        
-        const response = await fetch('/api/upload/linkedin-image', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Authorization': 'Bearer admin123'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to upload image');
-        }
-        
-        const result = await response.json();
-        finalForm.imageUrl = result.url;
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        toast({ title: "Error", description: "Failed to upload image", variant: "destructive" });
-        return;
-      } finally {
-        setUploadingLinkedinImage(false);
-      }
-    }
-    
-    createLinkedinPostMutation.mutate(finalForm);
+    createLinkedinPostMutation.mutate(linkedinForm);
     
     // Reset form after successful submission
     setLinkedinForm({ url: '', content: '', imageUrl: '', featured: false });
-    setLinkedinImageFile(null);
-    setLinkedinImageUploadMethod('url');
   };
 
   const handleDeleteLinkedinPost = (id: number) => {
@@ -1158,57 +1121,14 @@ export function Admin() {
                     </div>
                     
                     <div>
-                      <Label>Image (Optional)</Label>
-                      <div className="space-y-3">
-                        <div className="flex space-x-4">
-                          <label className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              value="url"
-                              checked={linkedinImageUploadMethod === 'url'}
-                              onChange={() => {
-                                setLinkedinImageUploadMethod('url');
-                                setLinkedinImageFile(null);
-                              }}
-                            />
-                            <span>Image URL</span>
-                          </label>
-                          <label className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              value="file"
-                              checked={linkedinImageUploadMethod === 'file'}
-                              onChange={() => {
-                                setLinkedinImageUploadMethod('file');
-                                setLinkedinForm({...linkedinForm, imageUrl: ''});
-                              }}
-                            />
-                            <span>Upload File</span>
-                          </label>
-                        </div>
-                        
-                        {linkedinImageUploadMethod === 'url' ? (
-                          <Input
-                            type="url"
-                            value={linkedinForm.imageUrl}
-                            onChange={(e) => setLinkedinForm({...linkedinForm, imageUrl: e.target.value})}
-                            placeholder="https://example.com/image.jpg"
-                          />
-                        ) : (
-                          <div className="space-y-2">
-                            <Input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => setLinkedinImageFile(e.target.files?.[0] || null)}
-                            />
-                            {linkedinImageFile && (
-                              <p className="text-sm text-gray-600 dark:text-gray-300">
-                                Selected: {linkedinImageFile.name}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
+                      <Label htmlFor="linkedinImageUrl">Image URL (Optional)</Label>
+                      <Input
+                        id="linkedinImageUrl"
+                        type="url"
+                        value={linkedinForm.imageUrl}
+                        onChange={(e) => setLinkedinForm({...linkedinForm, imageUrl: e.target.value})}
+                        placeholder="https://example.com/image.jpg"
+                      />
                     </div>
                     
                     <div className="flex items-center space-x-2">
@@ -1220,8 +1140,8 @@ export function Admin() {
                       <Label htmlFor="linkedinFeatured">Feature on Home Page</Label>
                     </div>
                     
-                    <Button type="submit" disabled={createLinkedinPostMutation.isPending || uploadingLinkedinImage} className="w-full">
-                      {uploadingLinkedinImage ? 'Uploading Image...' : createLinkedinPostMutation.isPending ? 'Adding...' : 'Add LinkedIn Post'}
+                    <Button type="submit" disabled={createLinkedinPostMutation.isPending} className="w-full">
+                      {createLinkedinPostMutation.isPending ? 'Adding...' : 'Add LinkedIn Post'}
                     </Button>
                   </form>
                 </CardContent>

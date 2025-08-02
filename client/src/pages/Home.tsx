@@ -244,22 +244,16 @@ export function Home() {
                   whileHover={{ scale: 1.02 }}
                 >
                   <Card className="shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={post.imageUrl || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400'}
-                        alt={post.title}
-                        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                        onLoad={() => console.log('Image loaded successfully:', post.imageUrl)}
-                        onError={(e) => {
-                          console.log('Image failed to load:', post.imageUrl);
-                          const target = e.target as HTMLImageElement;
-                          if (target.src !== 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400') {
-                            target.src = 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400';
-                          }
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
+                    {post.imageUrl && (
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={post.imageUrl}
+                          alt={post.title}
+                          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      </div>
+                    )}
                     <CardContent className="p-6">
                       <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
                         {post.title}

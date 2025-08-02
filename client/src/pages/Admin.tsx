@@ -1174,7 +1174,7 @@ export function Admin() {
                             />
                             <div className="flex items-center space-x-2">
                               <Switch
-                                checked={editingLinkedinPost.featured}
+                                checked={editingLinkedinPost.featured || false}
                                 onCheckedChange={(checked) => setEditingLinkedinPost({...editingLinkedinPost, featured: checked})}
                               />
                               <Label>Feature on Home Page</Label>
@@ -1198,15 +1198,40 @@ export function Admin() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                                {post.content}
-                              </p>
+                          <div className="space-y-3">
+                            <div className="flex gap-3">
+                              {post.imageUrl && (
+                                <div className="flex-shrink-0">
+                                  <img
+                                    src={post.imageUrl}
+                                    alt={post.title}
+                                    className="w-16 h-16 object-cover rounded-lg border"
+                                    onError={(e) => {
+                                      const target = e.target as HTMLImageElement;
+                                      target.style.display = 'none';
+                                    }}
+                                  />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-gray-900 dark:text-white mb-1 truncate">
+                                  {post.title}
+                                </h4>
+                                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                  {post.content}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 {post.featured && (
                                   <Badge variant="secondary" className="text-xs">
                                     Featured
+                                  </Badge>
+                                )}
+                                {post.imageUrl && (
+                                  <Badge variant="outline" className="text-xs">
+                                    Has Image
                                   </Badge>
                                 )}
                                 <Button
@@ -1217,23 +1242,23 @@ export function Admin() {
                                   <Link className="w-4 h-4" />
                                 </Button>
                               </div>
-                            </div>
-                            <div className="flex gap-1">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setEditingLinkedinPost(post)}
-                              >
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => handleDeleteLinkedinPost(post.id)}
-                                disabled={deleteLinkedinPostMutation.isPending}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setEditingLinkedinPost(post)}
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleDeleteLinkedinPost(post.id)}
+                                  disabled={deleteLinkedinPostMutation.isPending}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         )}

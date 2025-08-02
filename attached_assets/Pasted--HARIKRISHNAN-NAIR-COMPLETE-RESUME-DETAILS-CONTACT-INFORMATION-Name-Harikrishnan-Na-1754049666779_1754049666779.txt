@@ -1,0 +1,153 @@
+# HARIKRISHNAN NAIR - COMPLETE RESUME DETAILS
+
+## CONTACT INFORMATION
+- **Name:** Harikrishnan Nair
+- **Email:** harrinair2000@email.com
+- **Phone:** +91 8652449890
+- **GitHub:** [Profile Link Available]
+- **LinkedIn:** [Profile Link Available]
+- **Medium:** [Profile Link Available]
+
+## PROFESSIONAL SUMMARY
+AI Engineer with over 1.5 years of experience developing practical, production-ready AI solutions using large language models, retrieval systems, and conversational interfaces. Experienced in building secure, scalable systems for real-world use cases, including voice-driven applications and HIPAA-compliant data workflows. Skilled in integrating cloud technologies and automation tools to deliver end-to-end solutions that are both efficient and adaptable.
+
+## PROFESSIONAL EXPERIENCE
+
+### Data Engineer at CrossAsyst Infotech
+**Duration:** May 2024 – Present
+
+**Key Responsibilities & Achievements:**
+- Designed 15+ AI solutions (voice assistants, chatbots, automated workflows) for enterprise clients, ensuring alignment with business goals through regular stakeholder collaboration
+- Built HIPAA-compliant FHIR data processing pipeline for clinical data (93%+ patient eligibility accuracy on 500+ records in ~15s)
+- Implemented multi-level Retrieval-Augmented Generation (RAG) for ICD-10 medical coding (lowering AWT from several minutes to seconds, significantly reducing manual effort)
+- Developed voice-based AI assistant handling 20 to 30 calls/day (integrated with Zoom and VAPI / AWS Nova Sonic)
+- Communicated one-on-one with stakeholders to understand requirements
+- Mentored a small team of 5 developers and guided architectural decisions for scalable AI systems
+
+### AI R&D Intern at Incrify ai
+**Duration:** Dec 2023 – Jan 2024
+
+**Role Description:**
+Worked as an intern at incrify.ai, a cutting-edge startup specializing in AI solutions, in the R&D department.
+
+**Key Projects & Contributions:**
+- **Audio and Video Analysis:** Spearheaded the analysis of audio emotions, leveraging advanced algorithms to extract and interpret emotional cues from audio content
+- **AI Course Builder:** Developed a course building system that can generate courses with just a simple input which helps users learn concepts from scratch to advance
+- Collaborated with cross-functional teams to integrate AI features and gather stakeholder requirements
+
+## TECHNICAL SKILLS
+
+### Programming Languages
+- Python
+- SQL
+
+### ML/AI Frameworks
+- PyTorch
+- Scikit-learn
+- LangChain
+- LangGraph
+- MCP
+- A2A
+- OpenCV
+
+### Cloud/DevOps Technologies
+- AWS (Bedrock, OpenSearch, Sagemaker, Knowledge Base)
+- Groq
+- FastAPI
+
+### Databases/Tools
+- FAISS
+- PGvector
+- MySQL
+- PostgreSQL
+- n8n
+- VAPI
+- ElevenLabs
+- gTTS
+- edge_tts
+
+### CI/CD Tools
+- Data Version Control (DVC)
+- MLFlow
+- Grafana & Prometheus
+- Docker
+- Git
+- Github Actions
+- Kafka
+
+### Data Processing
+- Pandas
+- NumPy
+- FHIR data standards
+
+## DETAILED PROJECT PORTFOLIO
+
+### 1. WORKER COMPENSATION VOICE ASSISTANT
+**Technical Stack:** VAPI, GPT-4o, AWS Bedrock [Sonnet Claude 3.5], n8n
+
+**Project Details:**
+- Integrated the voice platform (VAPI) with Zoom to enable an AI-powered telephone assistant
+- Built the assistant using GPT-4o with n8n-orchestrated workflows and AWS Bedrock model for natural language processing
+- Leveraged existing service APIs (with custom adjustments) to fetch and process data for user queries
+
+### 2. ICD-10 CODE RETRIEVAL SYSTEM
+**Technical Stack:** LangChain, FAISS, AWS Bedrock [Sonnet Claude 3]
+
+**Project Details:**
+- Engineered a system to automatically identify ICD-10 codes from doctor's notes using LangChain's ReAct approach
+- Generated N-gram search queries and synonyms from notes; used FAISS to search across 75k+ ICD-10 codes for candidate matches
+- Combined vector retrieval and AWS Sonnet inference to output accurate codes, reducing manual coding time from minutes to seconds
+
+### 3. CLINICAL TRIAL ELIGIBILITY PARSER
+**Technical Stack:** LangGraph, LangChain, AWS Bedrock [Sonnet Claude 3.5], FAISS, RAG
+
+**Project Details:**
+- Developed a parser to automate trial eligibility, using LangChain to interpret and simplify criteria from diverse formats (JSON, text, PDF)
+- Conducted FAISS-based vector similarity search on HIPAA-compliant patient data to find potential matches for eligibility terms
+- Established inclusive and exclusive filtering pipelines (via AWS Sonnet LLMs generating SQL queries) and merged their outputs to finalize eligible patient lists (~93% accuracy)
+
+### 4. ADMINISTRATIVE AUTOMATION PLUGIN
+**Technical Stack:** n8n, AWS Bedrock [Sonnet Claude 3.5], FastAPI
+
+**Project Details:**
+- Created a voice/text-driven automation plugin allowing users to configure tasks via natural language in a chat interface
+- Example workflow: scheduling a meeting by voice - system gathers details (attendees, date/time, agenda) and validates them through backend calendar APIs
+- Implemented backend connectivity using FastAPI, enabling both voice notes and text commands to trigger n8n-orchestrated workflows
+
+## EDUCATION
+
+### JAIN UNIVERSITY – ONLINE
+**Degree:** Master of Computer Applications (AI)  
+**Duration:** Jul 2024 – Jul 2026
+
+### EKNATH B. MADHAVI SENIOR COLLEGE
+**Degree:** Bachelor of Science in Information Technology  
+**Duration:** Aug 2019 – Mar 2022
+
+## PROFESSIONAL COURSES
+
+### ITVEDANT EDUCATION PVT. LTD
+**Course:** Data Science & Analytics with AI  
+**Duration:** Dec 2022 – Feb 2024
+
+## CERTIFICATIONS
+
+### AWS Certified AI Practitioner (AIF-C01)
+- **Issuing Organization:** AWS
+- **Date:** Dec 2024 – Dec 2027
+- **Certificate ID:** 196bd0e5-9453-4668-893f-42ef6a81ff66
+
+### Data Analysis with Python
+- **Issuing Organization:** IBM
+- **Date:** Jul 2023
+- **Certificate ID:** 85b935bdb2b74e3e83ca27d430750026
+
+### Python Certification Training
+- **Issuing Organization:** Udemy
+- **Date:** May 2021
+
+## SOFT SKILLS
+- Effective Communication
+- Problem Solving abilities
+- Teamwork
+- Critical Thinking

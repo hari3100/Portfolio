@@ -1,0 +1,34 @@
+Create a fully responsive, animated, professional portfolio website using React and Tailwind CSS, with the following pages and features:
+
+🔷 Pages:
+1. **Home / Landing Page** – Rich design, smooth animations using Framer Motion, professional layout. Include a headline, short bio, dark/light mode toggle, and animated skill tags (e.g. Python, ML, GenAI, AWS, etc.).
+2. **About Me** – Includes full name (Aniket Dattaram Desai), career path as an emerging data scientist/ML engineer, education history, a timeline view of roles, certifications (AWS ML, IBM, SQL, etc.), and skills.
+3. **Projects** – Auto-fetch public GitHub repositories from GitHub user `Aniket-desai-24`. Each repo should be displayed as a card with:
+    - Project name
+    - Image (default thumbnail or custom)
+    - "Show More" button → opens a modal or new route with detailed description.
+    - Placeholder for owner-uploaded media (images or videos), visible only to Aniket when logged in (admin-only upload panel).
+4. **Blog** – Optional blog section with stylish blog cards. Blog content can be hardcoded in markdown format or static files.
+5. **Contact** – Simple contact form (name, email, message) + social links (LinkedIn, GitHub, Email).
+
+🔄 Auto Sync GitHub:
+- Use GitHub API to fetch project info dynamically.
+- Each new repo created on GitHub should automatically reflect on the portfolio.
+
+🔐 Admin Upload Feature:
+- Allow project-specific image or video uploads from the owner (Aniket). Use secure local storage or a simple upload route with password protection (or placeholder auth).
+
+💡 Technologies to use:
+- React
+- Tailwind CSS
+- Framer Motion (for page and element transitions)
+- GitHub API (for fetching repos)
+- React Router (for navigation)
+- Optional: Firebase/Auth or basic password auth for owner access
+
+🌓 Dark/Light mode toggle should be included across the site.
+
+📱 Design must be fully responsive for desktop, tablet, and mobile views.
+
+🎯 Final Goal:
+Make this a professional, stylish, highly interactive personal portfolio that stands out visually and technically, with an enriched and animated UI.

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "AWS Certified AI Practitioner (AIF-C01)",
+    "issuer": "AWS",
+    "year": "2024",
+    "imageUrl": "https://images.credly.com/images/4d4693bb-530e-4bca-9327-de07f3aa2348/image.png",
+    "description": "AWS AI Practitioner certification demonstrating foundational knowledge of AI/ML services",
+    "featured": true,
+    "createdAt": "2025-08-02T09:46:14.964Z"
+  },
+  {
+    "id": 2,
+    "title": "Data Analysis with Python",
+    "issuer": "IBM",
+    "year": "2023",
+    "imageUrl": "https://images.credly.com/images/f5bb6420-710c-4508-bd1f-df3a9d3fafb0/blob",
+    "description": "IBM certification in data analysis using Python",
+    "featured": true,
+    "createdAt": "2025-08-02T09:46:14.964Z"
+  },
+  {
+    "title": "The Complete Python Developer",
+    "issuer": "Udemy",
+    "year": "2021",
+    "imageUrl": "https://udemy-certificate.s3.amazonaws.com/image/UC-8698e218-7052-4b37-be5a-77128d701444.jpg",
+    "description": "",
+    "featured": true,
+    "id": 3,
+    "createdAt": "2025-08-02T10:58:42.965Z"
+  }
+]

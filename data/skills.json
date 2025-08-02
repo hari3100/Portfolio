@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Python",
+    "category": "Programming",
+    "logoUrl": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    "featured": true,
+    "createdAt": "2025-08-02T09:46:14.965Z"
+  },
+  {
+    "id": 2,
+    "name": "TensorFlow",
+    "category": "Machine Learning",
+    "logoUrl": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
+    "featured": true,
+    "createdAt": "2025-08-02T09:46:14.965Z"
+  },
+  {
+    "id": 3,
+    "name": "AWS",
+    "category": "Cloud",
+    "logoUrl": "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/aws-color.png",
+    "featured": true,
+    "createdAt": "2025-08-02T09:46:14.965Z"
+  }
+]

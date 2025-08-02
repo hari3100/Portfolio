@@ -232,59 +232,69 @@ export function Home() {
           </motion.div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {featuredLinkedinPosts?.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <Card className="shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={post.imageUrl || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400'}
-                      alt={post.title}
-                      className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                      onLoad={() => console.log('LinkedIn image loaded successfully:', post.imageUrl)}
-                      onError={(e) => {
-                        console.log('LinkedIn image failed to load:', post.imageUrl);
-                        const target = e.target as HTMLImageElement;
-                        target.src = 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    <div className="absolute top-4 right-4">
-                      <div className="bg-black/50 rounded-full p-2">
-                        <ExternalLink className="w-4 h-4 text-white" />
+            {featuredLinkedinPosts?.map((post, index) => {
+              console.log('LinkedIn post data:', post);
+              return (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <Card className="shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <div className="relative overflow-hidden">
+                      {post.imageUrl ? (
+                        <img
+                          src={post.imageUrl}
+                          alt={post.title}
+                          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                          onError={(e) => {
+                            console.log('LinkedIn image failed to load, using fallback:', post.imageUrl);
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400';
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400"
+                          alt={post.title}
+                          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      <div className="absolute top-4 right-4">
+                        <div className="bg-black/50 rounded-full p-2">
+                          <ExternalLink className="w-4 h-4 text-white" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
-                      {post.content}
-                    </p>
-                    <div className="flex items-center justify-end">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        asChild
-                        className="text-primary hover:text-primary/80"
-                      >
-                        <a href={post.postUrl} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-4 h-4 mr-1" />
-                          View Post
-                        </a>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                    <CardContent className="p-6">
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
+                        {post.content}
+                      </p>
+                      <div className="flex items-center justify-end">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          asChild
+                          className="text-primary hover:text-primary/80"
+                        >
+                          <a href={post.postUrl} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="w-4 h-4 mr-1" />
+                            View Post
+                          </a>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

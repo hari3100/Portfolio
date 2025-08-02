@@ -245,30 +245,14 @@ export function Home() {
                 >
                   <Card className="shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                     <div className="relative overflow-hidden">
-                      {post.imageUrl ? (
-                        <img
-                          src={post.imageUrl}
-                          alt={post.title}
-                          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                          onError={(e) => {
-                            console.log('LinkedIn image failed to load, using fallback:', post.imageUrl);
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400';
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400"
-                          alt={post.title}
-                          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                        />
-                      )}
+                      <img
+                        src={post.imageUrl}
+                        alt={post.title}
+                        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                        referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                      <div className="absolute top-4 right-4">
-                        <div className="bg-black/50 rounded-full p-2">
-                          <ExternalLink className="w-4 h-4 text-white" />
-                        </div>
-                      </div>
                     </div>
                     <CardContent className="p-6">
                       <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">

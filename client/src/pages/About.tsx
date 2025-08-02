@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GraduationCap, Award, Briefcase, Database, Cloud, Code, Brain } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import type { Skill, Certification } from '@shared/schema';
+import type { Skill, Certification, Education } from '@shared/schema';
 
 const getIconForCategory = (category: string) => {
   const categoryLower = category.toLowerCase();
@@ -40,26 +40,7 @@ const careerSteps = [
   }
 ];
 
-const education = [
-  {
-    degree: 'Master of Computer Applications (AI)',
-    institution: 'JAIN UNIVERSITY – ONLINE',
-    period: 'JUL 2024 – JUL 2026',
-    status: 'In Progress'
-  },
-  {
-    degree: 'Bachelor of Science in Information Technology',
-    institution: 'EKNATH B. MADHAVI SENIOR COLLEGE',
-    period: 'Aug 2019 – Mar 2022',
-    status: 'Completed'
-  },
-  {
-    degree: 'Course in Data Science & Analytics with AI',
-    institution: 'ITVEDANT EDUCATION PVT. LTD',
-    period: 'Dec 2022 – FEB 2024',
-    status: 'Completed'
-  }
-];
+
 
 export function About() {
   const { data: skills } = useQuery({
@@ -68,6 +49,10 @@ export function About() {
 
   const { data: certifications } = useQuery({
     queryKey: ['/api/certifications'],
+  });
+
+  const { data: education } = useQuery({
+    queryKey: ['/api/education'],
   });
 
   // Group skills by category
@@ -192,9 +177,9 @@ export function About() {
                             <GraduationCap className="w-5 h-5 mr-2" />
                             Education
                           </h4>
-                          {education.map((edu, index) => (
+                          {(education as Education[] | undefined)?.map((edu, index) => (
                             <motion.div
-                              key={edu.degree}
+                              key={edu.id}
                               className="flex items-start space-x-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 mb-3"
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
@@ -206,15 +191,19 @@ export function About() {
                               </div>
                               <div>
                                 <h5 className="font-semibold text-gray-900 dark:text-white">
-                                  {edu.degree}
+                                  {edu.courseName}
                                 </h5>
-                                <p className="text-primary text-sm">{edu.institution}</p>
+                                <p className="text-primary text-sm">{edu.collegeName}</p>
                                 <p className="text-gray-500 dark:text-gray-400 text-sm">
-                                  {edu.period} • {edu.status}
+                                  {edu.startMonth} {edu.startYear} - {edu.endMonth} {edu.endYear} • {edu.status}
                                 </p>
                               </div>
                             </motion.div>
-                          ))}
+                          )) || (
+                            <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+                              No education entries available
+                            </p>
+                          )}
                         </div>
 
                         {/* Certifications Section */}

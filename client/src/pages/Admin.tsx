@@ -13,7 +13,7 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 import { AdminModal } from '@/components/AdminModal';
 import { Plus, Edit, Trash2, Save, Eye, Settings, Link, Calendar, BookOpen, Mail, Github, Linkedin } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import type { Certification, Skill, LinkedinPost, Project, Blog, ContactInfo } from '@shared/schema';
+import type { Certification, Skill, LinkedinPost, Project, Blog, ContactInfo, Education } from '@shared/schema';
 
 export function Admin() {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -21,6 +21,7 @@ export function Admin() {
   const [activeTab, setActiveTab] = useState('blogs');
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [editingLinkedinPost, setEditingLinkedinPost] = useState<LinkedinPost | null>(null);
+  const [editingEducation, setEditingEducation] = useState<Education | null>(null);
   const { toast } = useToast();
 
   // Blog form state
@@ -49,6 +50,17 @@ export function Admin() {
     featured: false
   });
 
+  // Education form state
+  const [educationForm, setEducationForm] = useState({
+    courseName: '',
+    collegeName: '',
+    startMonth: '',
+    startYear: new Date().getFullYear(),
+    endMonth: '',
+    endYear: new Date().getFullYear(),
+    status: 'completed'
+  });
+
   // Queries
   const { data: blogs } = useQuery({
     queryKey: ['/api/blogs'],
@@ -62,6 +74,11 @@ export function Admin() {
 
   const { data: linkedinPosts } = useQuery({
     queryKey: ['/api/linkedin-posts'],
+    enabled: isAdminAuthenticated
+  });
+
+  const { data: education } = useQuery({
+    queryKey: ['/api/education'],
     enabled: isAdminAuthenticated
   });
 
@@ -181,6 +198,51 @@ export function Admin() {
     }
   });
 
+  // Education mutations
+  const createEducationMutation = useMutation({
+    mutationFn: (education: typeof educationForm) => apiRequest('POST', '/api/education', education, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/education'] });
+      setEducationForm({
+        courseName: '',
+        collegeName: '',
+        startMonth: '',
+        startYear: new Date().getFullYear(),
+        endMonth: '',
+        endYear: new Date().getFullYear(),
+        status: 'completed'
+      });
+      toast({ title: "Success", description: "Education added successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to add education", variant: "destructive" });
+    }
+  });
+
+  const updateEducationMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: Partial<Education> }) => 
+      apiRequest('PUT', `/api/education/${id}`, data, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/education'] });
+      setEditingEducation(null);
+      toast({ title: "Success", description: "Education updated successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to update education", variant: "destructive" });
+    }
+  });
+
+  const deleteEducationMutation = useMutation({
+    mutationFn: (id: number) => apiRequest('DELETE', `/api/education/${id}`, undefined, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/education'] });
+      toast({ title: "Success", description: "Education deleted successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to delete education", variant: "destructive" });
+    }
+  });
+
   // Check authentication on mount
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -235,6 +297,34 @@ export function Admin() {
     if (confirm('Are you sure you want to delete this LinkedIn post?')) {
       deleteLinkedinPostMutation.mutate(id);
     }
+  };
+
+  const handleEducationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingEducation) {
+      updateEducationMutation.mutate({ id: editingEducation.id, data: educationForm });
+    } else {
+      createEducationMutation.mutate(educationForm);
+    }
+  };
+
+  const handleDeleteEducation = (id: number) => {
+    if (confirm('Are you sure you want to delete this education entry?')) {
+      deleteEducationMutation.mutate(id);
+    }
+  };
+
+  const handleEditEducation = (edu: Education) => {
+    setEditingEducation(edu);
+    setEducationForm({
+      courseName: edu.courseName,
+      collegeName: edu.collegeName,
+      startMonth: edu.startMonth,
+      startYear: edu.startYear,
+      endMonth: edu.endMonth,
+      endYear: edu.endYear,
+      status: edu.status
+    });
   };
 
   if (!isAdminAuthenticated) {
@@ -293,9 +383,10 @@ export function Admin() {
         </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="blogs">Blog Management</TabsTrigger>
             <TabsTrigger value="linkedin">LinkedIn Posts</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
             <TabsTrigger value="contact">Contact Info</TabsTrigger>
             <TabsTrigger value="skills">Skills</TabsTrigger>
             <TabsTrigger value="certifications">Certifications</TabsTrigger>
@@ -474,6 +565,194 @@ export function Admin() {
                     )) || (
                       <p className="text-gray-500 dark:text-gray-400 text-center py-8">
                         No blog posts yet. Add your first blog post!
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Education Tab */}
+          <TabsContent value="education" className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* Add New Education */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Plus className="w-5 h-5 mr-2" />
+                    {editingEducation ? 'Edit Education' : 'Add New Education'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleEducationSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="courseName">Course Name</Label>
+                      <Input
+                        id="courseName"
+                        value={educationForm.courseName}
+                        onChange={(e) => setEducationForm({...educationForm, courseName: e.target.value})}
+                        placeholder="Master of Computer Applications (AI)"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="collegeName">College/Institution Name</Label>
+                      <Input
+                        id="collegeName"
+                        value={educationForm.collegeName}
+                        onChange={(e) => setEducationForm({...educationForm, collegeName: e.target.value})}
+                        placeholder="JAIN UNIVERSITY – ONLINE"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="startMonth">Start Month</Label>
+                        <Input
+                          id="startMonth"
+                          value={educationForm.startMonth}
+                          onChange={(e) => setEducationForm({...educationForm, startMonth: e.target.value})}
+                          placeholder="Jul"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="startYear">Start Year</Label>
+                        <Input
+                          id="startYear"
+                          type="number"
+                          value={educationForm.startYear}
+                          onChange={(e) => setEducationForm({...educationForm, startYear: parseInt(e.target.value)})}
+                          placeholder="2024"
+                          required
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="endMonth">End Month</Label>
+                        <Input
+                          id="endMonth"
+                          value={educationForm.endMonth}
+                          onChange={(e) => setEducationForm({...educationForm, endMonth: e.target.value})}
+                          placeholder="Jul"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="endYear">End Year</Label>
+                        <Input
+                          id="endYear"
+                          type="number"
+                          value={educationForm.endYear}
+                          onChange={(e) => setEducationForm({...educationForm, endYear: parseInt(e.target.value)})}
+                          placeholder="2026"
+                          required
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="status">Status</Label>
+                      <select
+                        id="status"
+                        value={educationForm.status}
+                        onChange={(e) => setEducationForm({...educationForm, status: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        required
+                      >
+                        <option value="completed">Completed</option>
+                        <option value="in progress">In Progress</option>
+                        <option value="to begin">To Begin</option>
+                        <option value="dropped off">Dropped Off</option>
+                      </select>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button type="submit" disabled={createEducationMutation.isPending || updateEducationMutation.isPending}>
+                        {editingEducation ? 'Update Education' : 'Add Education'}
+                      </Button>
+                      {editingEducation && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            setEditingEducation(null);
+                            setEducationForm({
+                              courseName: '',
+                              collegeName: '',
+                              startMonth: '',
+                              startYear: new Date().getFullYear(),
+                              endMonth: '',
+                              endYear: new Date().getFullYear(),
+                              status: 'completed'
+                            });
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+
+              {/* Education List */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2" />
+                    Current Education Entries
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {(education as Education[])?.map((edu) => (
+                      <div key={edu.id} className="p-4 border rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white">
+                              {edu.courseName}
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-300">
+                              {edu.collegeName}
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {edu.startMonth} {edu.startYear} - {edu.endMonth} {edu.endYear}
+                            </p>
+                            <Badge 
+                              variant={edu.status === 'completed' ? 'default' : 
+                                      edu.status === 'in progress' ? 'secondary' : 
+                                      edu.status === 'to begin' ? 'outline' : 'destructive'}
+                            >
+                              {edu.status}
+                            </Badge>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditEducation(edu)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteEducation(edu.id)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )) || (
+                      <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+                        No education entries yet. Add your first education!
                       </p>
                     )}
                   </div>

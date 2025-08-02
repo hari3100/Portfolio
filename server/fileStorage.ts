@@ -4,7 +4,8 @@ import type { IStorage } from './storage';
 import type { 
   User, InsertUser, Project, InsertProject, ContactMessage, InsertContactMessage,
   Certification, InsertCertification, LinkedinPost, InsertLinkedinPost,
-  Skill, InsertSkill, Blog, InsertBlog, ContactInfo, InsertContactInfo
+  Skill, InsertSkill, Blog, InsertBlog, ContactInfo, InsertContactInfo,
+  Education, InsertEducation
 } from '@shared/schema';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -457,6 +458,46 @@ export class FileStorage implements IStorage {
     const updated = { ...contactInfo, ...updates };
     await this.writeJsonFile('contactInfo.json', updated);
     return updated;
+  }
+
+  // Education methods
+  async getEducation(): Promise<Education[]> {
+    return await this.readJsonFile<Education[]>('education.json', []);
+  }
+
+  async createEducation(insertEducation: InsertEducation): Promise<Education> {
+    const educationList = await this.readJsonFile<Education[]>('education.json', []);
+    const newId = Math.max(0, ...educationList.map(e => e.id)) + 1;
+    const education: Education = {
+      ...insertEducation,
+      id: newId,
+      createdAt: new Date()
+    };
+    educationList.push(education);
+    await this.writeJsonFile('education.json', educationList);
+    return education;
+  }
+
+  async updateEducation(id: number, updates: Partial<InsertEducation>): Promise<Education | undefined> {
+    const educationList = await this.readJsonFile<Education[]>('education.json', []);
+    const index = educationList.findIndex(e => e.id === id);
+    if (index === -1) return undefined;
+
+    educationList[index] = { ...educationList[index], ...updates };
+    await this.writeJsonFile('education.json', educationList);
+    return educationList[index];
+  }
+
+  async deleteEducation(id: number): Promise<boolean> {
+    const educationList = await this.readJsonFile<Education[]>('education.json', []);
+    const initialLength = educationList.length;
+    const filtered = educationList.filter(e => e.id !== id);
+    
+    if (filtered.length < initialLength) {
+      await this.writeJsonFile('education.json', filtered);
+      return true;
+    }
+    return false;
   }
 
   async initializeData() {

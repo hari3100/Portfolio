@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactMessageSchema, insertProjectSchema, insertCertificationSchema, insertLinkedinPostSchema, insertSkillSchema, insertBlogSchema, insertContactInfoSchema } from "@shared/schema";
+import { insertContactMessageSchema, insertProjectSchema, insertCertificationSchema, insertLinkedinPostSchema, insertSkillSchema, insertBlogSchema, insertContactInfoSchema, insertEducationSchema } from "@shared/schema";
 import multer from "multer";
 import path from "path";
 
@@ -514,6 +514,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Update contact info error:", error);
       res.status(400).json({ error: "Invalid contact info data" });
+    }
+  });
+
+  // Education API
+  app.get("/api/education", async (req, res) => {
+    try {
+      const education = await storage.getEducation();
+      res.json(education);
+    } catch (error) {
+      console.error("Get education error:", error);
+      res.status(500).json({ error: "Failed to fetch education" });
+    }
+  });
+
+  app.post("/api/education", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const validatedData = insertEducationSchema.parse(req.body);
+      const education = await storage.createEducation(validatedData);
+      res.json(education);
+    } catch (error) {
+      console.error("Create education error:", error);
+      res.status(400).json({ error: "Invalid education data" });
+    }
+  });
+
+  app.put("/api/education/:id", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const education = await storage.updateEducation(id, updates);
+      
+      if (!education) {
+        return res.status(404).json({ error: "Education not found" });
+      }
+      
+      res.json(education);
+    } catch (error) {
+      console.error("Update education error:", error);
+      res.status(400).json({ error: "Invalid education data" });
+    }
+  });
+
+  app.delete("/api/education/:id", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deleteEducation(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ error: "Education not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete education error:", error);
+      res.status(500).json({ error: "Failed to delete education" });
     }
   });
 

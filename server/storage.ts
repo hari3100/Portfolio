@@ -1,4 +1,4 @@
-import { users, projects, contactMessages, certifications, linkedinPosts, skills, blogs, contactInfo, type User, type InsertUser, type Project, type InsertProject, type ContactMessage, type InsertContactMessage, type Certification, type InsertCertification, type LinkedinPost, type InsertLinkedinPost, type Skill, type InsertSkill, type Blog, type InsertBlog, type ContactInfo, type InsertContactInfo } from "@shared/schema";
+import { users, projects, contactMessages, certifications, linkedinPosts, skills, blogs, contactInfo, education, type User, type InsertUser, type Project, type InsertProject, type ContactMessage, type InsertContactMessage, type Certification, type InsertCertification, type LinkedinPost, type InsertLinkedinPost, type Skill, type InsertSkill, type Blog, type InsertBlog, type ContactInfo, type InsertContactInfo, type Education, type InsertEducation } from "@shared/schema";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -40,6 +40,11 @@ export interface IStorage {
   getContactInfo(): Promise<ContactInfo | undefined>;
   createContactInfo(contactInfo: InsertContactInfo): Promise<ContactInfo>;
   updateContactInfo(id: number, updates: Partial<InsertContactInfo>): Promise<ContactInfo | undefined>;
+
+  getEducation(): Promise<Education[]>;
+  createEducation(education: InsertEducation): Promise<Education>;
+  updateEducation(id: number, updates: Partial<InsertEducation>): Promise<Education | undefined>;
+  deleteEducation(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -405,6 +410,28 @@ export class MemStorage implements IStorage {
     const updated = { ...this.contactInfoData, ...updates };
     this.contactInfoData = updated;
     return updated;
+  }
+
+  // Education methods (stub implementation for MemStorage - not used since we use FileStorage)
+  async getEducation(): Promise<Education[]> {
+    return [];
+  }
+
+  async createEducation(education: InsertEducation): Promise<Education> {
+    const newEducation: Education = {
+      ...education,
+      id: 1,
+      createdAt: new Date()
+    };
+    return newEducation;
+  }
+
+  async updateEducation(id: number, updates: Partial<InsertEducation>): Promise<Education | undefined> {
+    return undefined;
+  }
+
+  async deleteEducation(id: number): Promise<boolean> {
+    return false;
   }
 
   async initializeData() {

@@ -84,6 +84,18 @@ export const contactInfo = pgTable("contact_info", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const education = pgTable("education", {
+  id: serial("id").primaryKey(),
+  courseName: text("course_name").notNull(),
+  collegeName: text("college_name").notNull(),
+  startMonth: text("start_month").notNull(),
+  startYear: integer("start_year").notNull(),
+  endMonth: text("end_month").notNull(),
+  endYear: integer("end_year").notNull(),
+  status: text("status").notNull(), // "completed", "in progress", "to begin", "dropped off"
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -132,6 +144,11 @@ export const insertContactInfoSchema = createInsertSchema(contactInfo).omit({
   createdAt: true,
 });
 
+export const insertEducationSchema = createInsertSchema(education).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Project = typeof projects.$inferSelect;
@@ -148,3 +165,5 @@ export type Blog = typeof blogs.$inferSelect;
 export type InsertBlog = z.infer<typeof insertBlogSchema>;
 export type ContactInfo = typeof contactInfo.$inferSelect;
 export type InsertContactInfo = z.infer<typeof insertContactInfoSchema>;
+export type Education = typeof education.$inferSelect;
+export type InsertEducation = z.infer<typeof insertEducationSchema>;

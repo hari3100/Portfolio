@@ -265,27 +265,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/linkedin-posts/:id", async (req, res) => {
-    try {
-      const adminPassword = req.headers.authorization;
-      if (adminPassword !== "Bearer admin123") {
-        return res.status(401).json({ error: "Unauthorized" });
-      }
 
-      const id = parseInt(req.params.id);
-      const updates = req.body;
-      const post = await storage.updateLinkedinPost(id, updates);
-      
-      if (!post) {
-        return res.status(404).json({ error: "LinkedIn post not found" });
-      }
-      
-      res.json(post);
-    } catch (error) {
-      console.error("Update LinkedIn post error:", error);
-      res.status(400).json({ error: "Invalid LinkedIn post data" });
-    }
-  });
 
   app.delete("/api/linkedin-posts/:id", async (req, res) => {
     try {
@@ -305,6 +285,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Delete LinkedIn post error:", error);
       res.status(500).json({ error: "Failed to delete LinkedIn post" });
+    }
+  });
+
+  // LinkedIn post image upload (admin only)
+  app.post("/api/upload/linkedin-image", upload.single('image'), async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const file = req.file;
+      if (!file) {
+        return res.status(400).json({ error: "No image file uploaded" });
+      }
+
+      // Validate it's an image
+      if (!file.mimetype.startsWith('image/')) {
+        return res.status(400).json({ error: "File must be an image" });
+      }
+
+      // Return the file URL
+      const fileUrl = `/uploads/${file.filename}`;
+      res.json({ url: fileUrl });
+    } catch (error) {
+      console.error("LinkedIn image upload error:", error);
+      res.status(500).json({ error: "Image upload failed" });
     }
   });
 

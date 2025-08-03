@@ -144,10 +144,10 @@ export function Home() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4, duration: 0.6 }}
-                  className="mb-6"
+                  className="mb-4"
                 >
                   <motion.span 
-                    className="text-2xl md:text-3xl font-light text-muted-foreground/80 tracking-wider"
+                    className="text-3xl md:text-4xl font-medium text-foreground/70 tracking-wide"
                     animate={{ opacity: [0.7, 1, 0.7] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   >
@@ -158,7 +158,7 @@ export function Home() {
                 {/* Main name with flowing animation */}
                 <motion.div className="relative">
                   <motion.h1 
-                    className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight relative z-10"
+                    className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight relative z-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.8 }}
@@ -178,45 +178,95 @@ export function Home() {
                     </motion.span>
                     <br />
                     <motion.span
-                      className="text-foreground/90 inline-block"
+                      className="gradient-text inline-block"
                       initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.8, duration: 0.6 }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 0,
+                        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] 
+                      }}
+                      transition={{ 
+                        delay: 0.8, 
+                        duration: 0.6,
+                        backgroundPosition: {
+                          duration: 8, 
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 1
+                        }
+                      }}
                     >
                       Nair
                     </motion.span>
                   </motion.h1>
                   
-                  {/* Flowing underline elements */}
-                  <motion.div
-                    className="absolute -bottom-4 left-0 right-0 h-px"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 1.2, duration: 1.5, ease: "easeOut" }}
-                  >
+                  {/* Intergalactic Time Loom - Branching Lines */}
+                  <motion.div className="absolute -bottom-6 left-0 right-0 h-px">
+                    {/* Main central line */}
                     <motion.div
-                      className="h-full bg-gradient-to-r from-transparent via-primary to-transparent"
-                      animate={{ 
-                        scaleX: [1, 1.2, 1],
-                        opacity: [0.5, 0.8, 0.5]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute top-0 left-1/2 transform -translate-x-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+                      initial={{ width: 0 }}
+                      animate={{ width: "60%" }}
+                      transition={{ delay: 1.2, duration: 1.5, ease: "easeOut" }}
+                    >
+                      <motion.div
+                        className="w-full h-full bg-gradient-to-r from-transparent via-primary to-transparent"
+                        animate={{ 
+                          opacity: [0.3, 1, 0.3],
+                          scaleX: [1, 1.1, 1]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      />
+                    </motion.div>
+                    
+                    {/* Left branching lines */}
+                    <motion.div
+                      className="absolute top-0 left-1/2 w-px h-4 bg-gradient-to-b from-primary/60 to-transparent origin-bottom"
+                      initial={{ scaleY: 0, rotate: 0 }}
+                      animate={{ scaleY: 1, rotate: -25 }}
+                      transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
                     />
-                  </motion.div>
-                  
-                  <motion.div
-                    className="absolute -bottom-6 left-1/4 right-1/4 h-px"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 1.4, duration: 1.2, ease: "easeOut" }}
-                  >
                     <motion.div
-                      className="h-full bg-gradient-to-r from-transparent via-secondary to-transparent"
+                      className="absolute top-0 left-1/2 w-px h-6 bg-gradient-to-b from-secondary/40 to-transparent origin-bottom"
+                      initial={{ scaleY: 0, rotate: 0 }}
+                      animate={{ scaleY: 1, rotate: -45 }}
+                      transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
+                    />
+                    <motion.div
+                      className="absolute top-0 left-1/2 w-px h-3 bg-gradient-to-b from-primary/30 to-transparent origin-bottom"
+                      initial={{ scaleY: 0, rotate: 0 }}
+                      animate={{ scaleY: 1, rotate: -15 }}
+                      transition={{ delay: 2.2, duration: 0.4, ease: "easeOut" }}
+                    />
+                    
+                    {/* Right branching lines */}
+                    <motion.div
+                      className="absolute top-0 right-1/2 w-px h-4 bg-gradient-to-b from-primary/60 to-transparent origin-bottom"
+                      initial={{ scaleY: 0, rotate: 0 }}
+                      animate={{ scaleY: 1, rotate: 25 }}
+                      transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
+                    />
+                    <motion.div
+                      className="absolute top-0 right-1/2 w-px h-6 bg-gradient-to-b from-secondary/40 to-transparent origin-bottom"
+                      initial={{ scaleY: 0, rotate: 0 }}
+                      animate={{ scaleY: 1, rotate: 45 }}
+                      transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
+                    />
+                    <motion.div
+                      className="absolute top-0 right-1/2 w-px h-3 bg-gradient-to-b from-primary/30 to-transparent origin-bottom"
+                      initial={{ scaleY: 0, rotate: 0 }}
+                      animate={{ scaleY: 1, rotate: 15 }}
+                      transition={{ delay: 2.2, duration: 0.4, ease: "easeOut" }}
+                    />
+                    
+                    {/* Pulsing energy center */}
+                    <motion.div
+                      className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-2 -mt-1 rounded-full bg-primary/80"
                       animate={{ 
-                        scaleX: [1, 0.8, 1],
-                        opacity: [0.3, 0.6, 0.3]
+                        scale: [1, 1.5, 1],
+                        opacity: [0.6, 1, 0.6]
                       }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                     />
                   </motion.div>
                 </motion.div>
@@ -505,12 +555,7 @@ export function Home() {
                         {post.content}
                       </p>
                       
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span>{post.likes || 0} likes</span>
-                          <span>{post.comments || 0} comments</span>
-                        </div>
-                        
+                      <div className="flex items-center justify-end">
                         <Button
                           variant="ghost"
                           size="sm"

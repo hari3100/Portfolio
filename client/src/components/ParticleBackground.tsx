@@ -57,15 +57,24 @@ export function ParticleBackground() {
         particle.x += particle.vx;
         particle.y += particle.vy;
         
-        // Mouse interaction
+        // Enhanced Mouse interaction - More responsive
         const dx = mouse.x - particle.x;
         const dy = mouse.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          particle.vx += (dx / distance) * force * 0.01;
-          particle.vy += (dy / distance) * force * 0.01;
+        if (distance < 150) {
+          const force = (150 - distance) / 150;
+          const magneticForce = force * force; // Quadratic falloff for more dramatic effect
+          particle.vx += (dx / distance) * magneticForce * 0.02;
+          particle.vy += (dy / distance) * magneticForce * 0.02;
+          
+          // Dynamic size based on proximity
+          particle.size = Math.max(1, Math.min(6, particle.size + force * 2));
+          particle.opacity = Math.max(0.2, Math.min(1, particle.opacity + force * 0.5));
+        } else {
+          // Reset size and opacity when away from cursor
+          particle.size = Math.max(1, particle.size * 0.98);
+          particle.opacity = Math.max(0.2, particle.opacity * 0.99);
         }
         
         // Boundary check

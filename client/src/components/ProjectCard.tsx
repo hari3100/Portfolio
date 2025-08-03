@@ -74,16 +74,7 @@ export function ProjectCard({ repo, onShowMore }: ProjectCardProps) {
               }
             }}
           />
-          {hasCustomImage() && (
-            <div className="absolute top-2 left-2">
-              <Badge
-                variant="secondary"
-                className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
-              >
-                {storedImageUrl ? "Showcase Image" : "Custom Image"}
-              </Badge>
-            </div>
-          )}
+
         </div>
 
         <CardContent className="p-6">

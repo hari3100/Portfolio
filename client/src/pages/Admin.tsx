@@ -1348,6 +1348,30 @@ function SkillsManager() {
     }
   };
 
+  const handleDeleteSkill = async (skillId: number) => {
+    if (!confirm('Are you sure you want to delete this skill?')) {
+      return;
+    }
+    
+    try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        toast({ title: "Error", description: "Authentication required", variant: "destructive" });
+        return;
+      }
+      
+      await apiRequest('DELETE', `/api/skills/${skillId}`, null, {
+        'Authorization': `Bearer ${token}`
+      });
+      
+      refetch();
+      toast({ title: "Success", description: "Skill deleted successfully" });
+    } catch (error) {
+      console.error('Delete skill error:', error);
+      toast({ title: "Error", description: "Failed to delete skill", variant: "destructive" });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -1458,6 +1482,13 @@ function SkillsManager() {
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" onClick={() => setEditingSkill(skill)}>
                       <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="destructive" 
+                      onClick={() => handleDeleteSkill(skill.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>

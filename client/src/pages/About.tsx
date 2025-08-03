@@ -247,162 +247,169 @@ export function About() {
             </div>
           </div>
           
-          {/* Education & Certification - Full Width Below */}
-          <motion.div 
-            className="mt-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-          >
-            <Card className="card-hover glass-card border-0 overflow-hidden">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-secondary to-primary flex items-center justify-center">
-                    <GraduationCap className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground">Education & Certifications</h3>
-                </div>
-                <ScrollArea className="h-96 pr-4">
-                  <div className="space-y-6">
-                    {/* Education Section */}
-                    <div>
-                      <h4 className="font-semibold text-primary mb-4 flex items-center">
-                        <GraduationCap className="w-5 h-5 mr-2" />
-                        Education
-                      </h4>
-                      {(education as Education[] | undefined)?.map((edu, index) => (
-                        <motion.div
-                          key={edu.id}
-                          className="flex items-start space-x-4 p-4 rounded-lg glass-card border border-primary/10 mb-3"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.6 + index * 0.1 }}
-                          whileHover={{ scale: 1.02 }}
-                        >
-                          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                            <GraduationCap className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <h5 className="font-semibold text-foreground">
-                              {edu.courseName}
-                            </h5>
-                            <p className="text-primary text-sm">{edu.collegeName}</p>
-                            <p className="text-muted-foreground text-sm">
-                              {edu.startMonth} {edu.startYear} - {edu.endMonth} {edu.endYear} • {edu.status}
-                            </p>
-                          </div>
-                        </motion.div>
-                      )) || (
-                        <p className="text-muted-foreground text-center py-4">
-                          No education entries available
-                        </p>
-                      )}
+          {/* Second Row: Education & Certifications (Left) and Technical Expertise (Right) */}
+          <div className="grid lg:grid-cols-2 gap-12 items-start mt-20">
+            {/* Education & Certifications - Left Side */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="group"
+            >
+              <Card className="card-hover glass-card border-0 overflow-hidden h-full">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-secondary to-primary flex items-center justify-center">
+                      <GraduationCap className="w-5 h-5 text-white" />
                     </div>
-
-                    {/* Certifications Section */}
-                    <div>
-                      <h4 className="font-semibold text-primary mb-4 flex items-center">
-                        <Award className="w-5 h-5 mr-2" />
-                        Certifications
-                      </h4>
-                      {(certifications as Certification[] | undefined)?.slice(0, 3).map((cert: Certification, index: number) => (
-                        <motion.div
-                          key={cert.id}
-                          className="flex items-start space-x-4 p-4 rounded-lg glass-card border border-primary/10 mb-3"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.8 + index * 0.1 }}
-                          whileHover={{ scale: 1.02 }}
-                        >
-                          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                            <Award className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <h5 className="font-semibold text-foreground">
-                              {cert.title}
-                            </h5>
-                            <p className="text-primary text-sm">{cert.issuer}</p>
-                            <p className="text-muted-foreground text-sm">{cert.year}</p>
-                            {cert.description && (
-                              <p className="text-muted-foreground text-xs mt-1">
-                                {cert.description}
-                              </p>
-                            )}
-                          </div>
-                        </motion.div>
-                      ))}
-                      {(certifications as Certification[] | undefined) && (certifications as Certification[]).length > 3 && (
-                        <div className="text-center mt-4">
-                          <Badge variant="outline" className="text-primary">
-                            +{(certifications as Certification[]).length - 3} more certifications
-                          </Badge>
-                        </div>
-                      )}
-                    </div>
+                    <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                      Education & Certifications
+                    </h3>
                   </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </motion.div>
-          
-          {/* Technical Expertise - Full Width Below */}
-          <motion.div 
-            className="mt-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.7 }}
-          >
-            <Card className="card-hover glass-card border-0 overflow-hidden">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-secondary to-primary flex items-center justify-center">
-                    <Database className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground">Technical Expertise</h3>
-                </div>
-                
-                <ScrollArea className="h-96 pr-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {Object.entries(skillsByCategory).map(([category, categorySkills], index) => {
-                      const IconComponent = getIconForCategory(category);
-                      return (
-                        <motion.div
-                          key={category}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.8 + index * 0.1 }}
-                          className="p-4 rounded-lg glass-card border border-primary/10 hover:border-primary/20 transition-all duration-300"
-                        >
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                              <IconComponent className="w-4 h-4 text-primary" />
+                  <ScrollArea className="h-96 pr-4">
+                    <div className="space-y-6">
+                      {/* Education Section */}
+                      <div>
+                        <h4 className="font-semibold text-primary mb-4 flex items-center">
+                          <GraduationCap className="w-5 h-5 mr-2" />
+                          Education
+                        </h4>
+                        {(education as Education[] | undefined)?.map((edu, index) => (
+                          <motion.div
+                            key={edu.id}
+                            className="flex items-start space-x-4 p-4 rounded-lg glass-card border border-primary/10 mb-3"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.6 + index * 0.1 }}
+                            whileHover={{ scale: 1.02 }}
+                          >
+                            <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                              <GraduationCap className="w-6 h-6 text-white" />
                             </div>
-                            <h4 className="font-semibold text-foreground">{category}</h4>
+                            <div>
+                              <h5 className="font-semibold text-foreground">
+                                {edu.courseName}
+                              </h5>
+                              <p className="text-primary text-sm">{edu.collegeName}</p>
+                              <p className="text-muted-foreground text-sm">
+                                {edu.startMonth} {edu.startYear} - {edu.endMonth} {edu.endYear} • {edu.status}
+                              </p>
+                            </div>
+                          </motion.div>
+                        )) || (
+                          <p className="text-muted-foreground text-center py-4">
+                            No education entries available
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Certifications Section */}
+                      <div>
+                        <h4 className="font-semibold text-primary mb-4 flex items-center">
+                          <Award className="w-5 h-5 mr-2" />
+                          Certifications
+                        </h4>
+                        {(certifications as Certification[] | undefined)?.slice(0, 3).map((cert: Certification, index: number) => (
+                          <motion.div
+                            key={cert.id}
+                            className="flex items-start space-x-4 p-4 rounded-lg glass-card border border-primary/10 mb-3"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.8 + index * 0.1 }}
+                            whileHover={{ scale: 1.02 }}
+                          >
+                            <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                              <Award className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-foreground">
+                                {cert.title}
+                              </h5>
+                              <p className="text-primary text-sm">{cert.issuer}</p>
+                              <p className="text-muted-foreground text-sm">{cert.year}</p>
+                              {cert.description && (
+                                <p className="text-muted-foreground text-xs mt-1">
+                                  {cert.description}
+                                </p>
+                              )}
+                            </div>
+                          </motion.div>
+                        ))}
+                        {(certifications as Certification[] | undefined) && (certifications as Certification[]).length > 3 && (
+                          <div className="text-center mt-4">
+                            <Badge variant="outline" className="text-primary">
+                              +{(certifications as Certification[]).length - 3} more certifications
+                            </Badge>
                           </div>
-                          <div className="flex flex-wrap gap-2">
-                            {(categorySkills as Skill[]).map((skill: Skill) => (
-                              <motion.span
-                                key={skill.id}
-                                whileHover={{ scale: 1.05 }}
-                                className="px-3 py-1 text-xs font-medium bg-primary/5 text-primary rounded-full border border-primary/10 hover:border-primary/20 transition-all duration-300"
-                              >
-                                {skill.name}
-                              </motion.span>
-                            ))}
-                          </div>
-                        </motion.div>
-                      );
-                    })}
+                        )}
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </motion.div>
+            
+            {/* Technical Expertise - Right Side */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.7 }}
+              className="group"
+            >
+              <Card className="card-hover glass-card border-0 overflow-hidden h-full">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-secondary to-primary flex items-center justify-center">
+                      <Database className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                      Technical Expertise
+                    </h3>
                   </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </motion.div>
+                  
+                  <ScrollArea className="h-96 pr-4">
+                    <div className="grid grid-cols-1 gap-6">
+                      {Object.entries(skillsByCategory).map(([category, categorySkills], index) => {
+                        const IconComponent = getIconForCategory(category);
+                        return (
+                          <motion.div
+                            key={category}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.8 + index * 0.1 }}
+                            className="p-4 rounded-lg glass-card border border-primary/10 hover:border-primary/20 transition-all duration-300"
+                          >
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <IconComponent className="w-4 h-4 text-primary" />
+                              </div>
+                              <h4 className="font-semibold text-foreground">{category}</h4>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {(categorySkills as Skill[]).map((skill: Skill) => (
+                                <motion.span
+                                  key={skill.id}
+                                  whileHover={{ scale: 1.05 }}
+                                  className="px-3 py-1 text-xs font-medium bg-primary/5 text-primary rounded-full border border-primary/10 hover:border-primary/20 transition-all duration-300"
+                                >
+                                  {skill.name}
+                                </motion.span>
+                              ))}
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

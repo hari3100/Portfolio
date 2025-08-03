@@ -2,9 +2,10 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Rocket, Mail, ChevronDown, Award, ExternalLink } from 'lucide-react';
+import { Rocket, Mail, ChevronDown, Award, ExternalLink, Sparkles, Code, Brain, Database } from 'lucide-react';
 import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
+import { ParticleBackground } from '@/components/ParticleBackground';
 import type { Certification, Skill, LinkedinPost } from '@shared/schema';
 
 export function Home() {
@@ -24,64 +25,110 @@ export function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="min-h-screen flex items-center pt-20 relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-white to-secondary/5 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 opacity-50" />
+        {/* Enhanced Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5 dark:from-background dark:via-primary/10 dark:to-secondary/10" />
         
+        {/* Particle Background */}
+        <ParticleBackground />
+        
+        {/* Modern Floating Elements */}
         <motion.div 
           animate={{ 
-            y: [0, -10, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{ 
-            duration: 6, 
-            repeat: Infinity, 
-            ease: "easeInOut" 
-          }}
-          className="absolute top-20 right-20 w-72 h-72 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl"
-        />
-        
-        <motion.div 
-          animate={{ 
-            y: [0, 10, 0],
-            rotate: [0, -5, 0]
+            y: [0, -20, 0],
+            rotate: [0, 10, 0],
+            scale: [1, 1.1, 1]
           }}
           transition={{ 
             duration: 8, 
             repeat: Infinity, 
-            ease: "easeInOut",
-            delay: 1
+            ease: "easeInOut" 
           }}
-          className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-r from-secondary/20 to-primary/20 rounded-full blur-3xl"
+          className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full blur-3xl opacity-40"
+        />
+        
+        <motion.div 
+          animate={{ 
+            y: [0, 15, 0],
+            rotate: [0, -8, 0],
+            scale: [1, 0.9, 1]
+          }}
+          transition={{ 
+            duration: 10, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+            delay: 2
+          }}
+          className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-r from-secondary/25 to-primary/25 rounded-full blur-3xl opacity-30"
+        />
+        
+        {/* Geometric shapes */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/3 right-1/3 w-32 h-32 border border-primary/20 rounded-lg"
+        />
+        
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-1/3 left-1/3 w-24 h-24 border border-secondary/20 rounded-full"
         />
         
         <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-5xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <motion.h1 
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-primary to-secondary dark:from-white dark:via-primary dark:to-secondary bg-clip-text text-transparent leading-tight"
+              {/* Enhanced Hero Title */}
+              <motion.div 
+                className="relative inline-block mb-6"
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                Harikrishnan Nair
-              </motion.h1>
+                <motion.h1 
+                  className="text-6xl md:text-8xl font-bold gradient-text leading-tight relative z-10"
+                  animate={{ 
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] 
+                  }}
+                  transition={{ 
+                    duration: 8, 
+                    repeat: Infinity,
+                    ease: "easeInOut" 
+                  }}
+                >
+                  Harikrishnan Nair
+                </motion.h1>
+                
+                {/* Glowing underline effect */}
+                <motion.div
+                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-primary to-secondary rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: "60%" }}
+                  transition={{ delay: 0.8, duration: 1.2, ease: "easeOut" }}
+                />
+              </motion.div>
               
-              <motion.p 
-                className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto"
+              <motion.div 
+                className="relative"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                AI Engineer & Machine Learning Specialist building next-generation intelligent systems with Python, Deep Learning, and Cloud Computing
-              </motion.p>
+                <p className="text-2xl md:text-3xl text-muted-foreground mb-4 font-light">
+                  AI Engineer & Machine Learning Specialist
+                </p>
+                <p className="text-lg md:text-xl text-muted-foreground/80 mb-12 max-w-4xl mx-auto leading-relaxed">
+                  Building next-generation intelligent systems with Python, Deep Learning, and Cloud Computing. 
+                  Transforming complex data into actionable insights and scalable AI solutions.
+                </p>
+              </motion.div>
               
-              {/* Skill Tags with Logos */}
+              {/* Enhanced Skill Tags */}
               <motion.div 
-                className="flex flex-wrap justify-center gap-4 mb-12"
+                className="flex flex-wrap justify-center gap-3 mb-16"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
@@ -92,48 +139,67 @@ export function Home() {
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.8 + index * 0.1 }}
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <Badge 
-                      variant="secondary" 
-                      className="px-4 py-3 text-sm font-medium bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-primary hover:text-primary transition-all duration-300 cursor-pointer flex items-center gap-2"
-                    >
-                      {skill.logoUrl && (
-                        <img 
-                          src={skill.logoUrl} 
-                          alt={skill.name}
-                          className="w-5 h-5"
-                        />
-                      )}
-                      {skill.name}
-                    </Badge>
+                    <div className="glass-card px-6 py-3 cursor-pointer group hover:shadow-lg transition-all duration-300">
+                      <div className="flex items-center gap-3">
+                        {skill.logoUrl ? (
+                          <img 
+                            src={skill.logoUrl} 
+                            alt={skill.name}
+                            className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-5 h-5 rounded bg-gradient-to-r from-primary to-secondary opacity-80" />
+                        )}
+                        <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-300">
+                          {skill.name}
+                        </span>
+                      </div>
+                      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/0 to-secondary/0 group-hover:from-primary/5 group-hover:to-secondary/5 transition-all duration-300" />
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
               
-              {/* CTA Buttons */}
+              {/* Enhanced CTA Buttons */}
               <motion.div 
-                className="flex flex-col sm:flex-row gap-4 justify-center"
+                className="flex flex-col sm:flex-row gap-6 justify-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.2 }}
               >
                 <Link href="/projects">
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                    <Rocket className="w-5 h-5 mr-2" />
-                    View Projects
-                  </Button>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button 
+                      size="lg" 
+                      className="btn-primary px-8 py-4 text-white shadow-2xl hover:shadow-primary/25 group relative"
+                    >
+                      <Rocket className="w-5 h-5 mr-3 group-hover:animate-bounce" />
+                      <span className="font-semibold">Explore Projects</span>
+                      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </Button>
+                  </motion.div>
                 </Link>
                 
                 <Link href="/contact">
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    className="bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm border-gray-300 dark:border-gray-600 hover:border-primary transform hover:scale-105 transition-all duration-300"
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <Mail className="w-5 h-5 mr-2" />
-                    Get In Touch
-                  </Button>
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="glass-card px-8 py-4 border-primary/30 hover:border-primary hover:bg-primary/5 group relative"
+                    >
+                      <Mail className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+                      <span className="font-semibold">Get In Touch</span>
+                    </Button>
+                  </motion.div>
                 </Link>
               </motion.div>
             </motion.div>
@@ -150,60 +216,96 @@ export function Home() {
         </motion.div>
       </section>
 
-      {/* Certifications Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="container mx-auto px-6">
+      {/* Enhanced Certifications Section */}
+      <section className="py-24 bg-gradient-to-br from-muted/30 via-background to-muted/30 relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          className="absolute top-10 right-10 w-32 h-32 border border-primary/10 rounded-full"
+        />
+        
+        <div className="container mx-auto px-6 relative z-10">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-20"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              Certifications & Achievements
+            <motion.div
+              initial={{ scale: 0.9 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6"
+            >
+              <Award className="w-5 h-5 text-primary" />
+              <span className="text-sm font-medium text-primary">Achievements</span>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
+              Certifications & Professional Recognition
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Professional certifications that validate my expertise in data science and cloud technologies
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Professional certifications that validate expertise in artificial intelligence, 
+              data science, and cloud technologies.
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {featuredCertifications?.map((cert, index) => (
               <motion.div
                 key={cert.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ y: -8 }}
+                className="group"
               >
-                <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0">
+                <Card className="card-hover glass-card border-0 overflow-hidden h-full">
+                  <CardContent className="p-8">
+                    <div className="flex items-start space-x-6">
+                      <motion.div 
+                        className="flex-shrink-0 relative"
+                        whileHover={{ scale: 1.1 }}
+                      >
                         {cert.imageUrl ? (
-                          <img 
-                            src={cert.imageUrl} 
-                            alt={cert.title}
-                            className="w-16 h-16 rounded-lg object-cover"
-                          />
+                          <div className="relative">
+                            <img 
+                              src={cert.imageUrl} 
+                              alt={cert.title}
+                              className="w-20 h-20 rounded-xl object-cover shadow-lg"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          </div>
                         ) : (
-                          <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                            <Award className="w-8 h-8 text-white" />
+                          <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+                            <Award className="w-10 h-10 text-white" />
                           </div>
                         )}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">
+                      </motion.div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-xl text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                           {cert.title}
                         </h3>
-                        <p className="text-primary font-medium mb-1">{cert.issuer}</p>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">{cert.year}</p>
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="font-semibold text-primary">{cert.issuer}</span>
+                          <span className="text-muted-foreground">•</span>
+                          <span className="text-muted-foreground">{cert.year}</span>
+                        </div>
                         {cert.description && (
-                          <p className="text-gray-600 dark:text-gray-300 text-sm">
+                          <p className="text-muted-foreground leading-relaxed">
                             {cert.description}
                           </p>
                         )}
+                        
+                        {/* Achievement badge */}
+                        <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                          <Sparkles className="w-4 h-4" />
+                          <span>Certified</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -214,63 +316,102 @@ export function Home() {
         </div>
       </section>
 
-      {/* LinkedIn Posts Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-6">
+      {/* Enhanced LinkedIn Posts Section */}
+      <section className="py-24 bg-background relative">
+        {/* Animated background elements */}
+        <motion.div
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.1, 0.3]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full blur-3xl"
+        />
+        
+        <div className="container mx-auto px-6 relative z-10">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-20"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              Recent LinkedIn Activity
+            <motion.div
+              initial={{ scale: 0.9 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6"
+            >
+              <div className="w-5 h-5 rounded bg-gradient-to-r from-[#0077B5] to-[#00A0DC]" />
+              <span className="text-sm font-medium text-primary">LinkedIn Activity</span>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
+              Professional Insights & Updates
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Stay updated with my latest professional insights and project highlights
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Stay connected with my latest professional journey, insights, and project highlights 
+              shared across my professional network.
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {featuredLinkedinPosts?.map((post, index) => {
               console.log('LinkedIn post data:', post);
               return (
                 <motion.div
                   key={post.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ y: -8 }}
+                  className="group"
                 >
-                  <Card className="shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  <Card className="card-hover glass-card border-0 overflow-hidden h-full">
                     {post.imageUrl && (
                       <div className="relative overflow-hidden">
-                        <img
+                        <motion.img
                           src={post.imageUrl}
                           alt={post.title}
-                          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                          className="w-full h-56 object-cover"
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.3 }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <div className="flex items-center gap-2 text-white">
+                            <div className="w-6 h-6 rounded bg-gradient-to-r from-[#0077B5] to-[#00A0DC] flex items-center justify-center">
+                              <span className="text-xs font-bold">in</span>
+                            </div>
+                            <span className="text-sm font-medium">LinkedIn Post</span>
+                          </div>
+                        </div>
                       </div>
                     )}
-                    <CardContent className="p-6">
-                      <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2">
+                    
+                    <CardContent className="p-8">
+                      <h3 className="font-bold text-xl text-foreground mb-4 line-clamp-2 group-hover:text-primary transition-colors duration-300">
                         {post.title}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
+                      <p className="text-muted-foreground mb-6 line-clamp-3 leading-relaxed">
                         {post.content}
                       </p>
-                      <div className="flex items-center justify-end">
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <span>{post.likes || 0} likes</span>
+                          <span>{post.comments || 0} comments</span>
+                        </div>
+                        
                         <Button
                           variant="ghost"
                           size="sm"
                           asChild
-                          className="text-primary hover:text-primary/80"
+                          className="text-primary hover:text-primary/80 hover:bg-primary/10 group-hover:translate-x-1 transition-all duration-300"
                         >
                           <a href={post.postUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="w-4 h-4 mr-1" />
-                            View Post
+                            <span className="mr-2">View Post</span>
+                            <ExternalLink className="w-4 h-4" />
                           </a>
                         </Button>
                       </div>

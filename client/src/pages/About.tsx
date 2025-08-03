@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { GraduationCap, Award, Briefcase, Database, Cloud, Code, Brain } from 'lucide-react';
+import { GraduationCap, Award, Briefcase, Database, Cloud, Code, Brain, Sparkles } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import type { Skill, Certification, Education } from '@shared/schema';
 
@@ -65,94 +65,192 @@ export function About() {
   }, {} as Record<string, Skill[]>) || {};
 
   return (
-    <section className="py-20 bg-gray-50 dark:bg-gray-800 mt-20">
+    <div className="min-h-screen pt-20">
+      {/* Hero Section */}
+      <section className="py-24 bg-gradient-to-br from-background via-primary/5 to-secondary/5 relative overflow-hidden">
+        {/* Background Elements */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/4 right-1/4 w-64 h-64 border border-primary/10 rounded-full"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-r from-secondary/20 to-primary/20 rounded-full blur-3xl"
+        />
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.div
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8"
+              >
+                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-primary to-secondary" />
+                <span className="text-sm font-medium text-primary">About Me</span>
+              </motion.div>
+              
+              <h1 className="text-5xl md:text-6xl font-bold mb-8 gradient-text">
+                Passionate About AI Innovation
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
+                Transforming complex challenges into intelligent solutions through cutting-edge 
+                machine learning, deep learning, and cloud technologies.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-20 py-20"
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
-              About Me
+            <motion.div
+              initial={{ scale: 0.9 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8"
+            >
+              <Brain className="w-5 h-5 text-primary" />
+              <span className="text-sm font-medium text-primary">Professional Journey</span>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-8 gradient-text">
+              Experience & Expertise
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              AI Engineer with over 1.5 years of experience developing practical, production-ready AI solutions using large language models, retrieval systems, and conversational interfaces.
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              With over 1.5 years of specialized experience, I focus on developing production-ready AI solutions 
+              using large language models, retrieval systems, and conversational interfaces that solve real-world challenges.
             </p>
           </motion.div>
           
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Personal Info */}
+            {/* Enhanced Personal Info */}
             <div className="space-y-8">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
+                className="group"
               >
-                <Card className="shadow-lg">
+                <Card className="card-hover glass-card border-0 overflow-hidden h-full">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-6">Background</h3>
-                    <ScrollArea className="h-64 pr-4">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                        <Code className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                        Professional Background
+                      </h3>
+                    </div>
+                    
+                    <div className="space-y-6">
                       <div className="space-y-4">
-                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                          AI Engineer with over 1.5 years of experience developing practical, production-ready AI solutions using large language models, retrieval systems, and conversational interfaces. Experienced in building secure, scalable systems for real-world use cases, including voice-driven applications and HIPAA-compliant data workflows.
+                        <p className="text-muted-foreground leading-relaxed">
+                          AI Engineer with over 1.5 years of experience developing practical, production-ready AI solutions 
+                          using large language models, retrieval systems, and conversational interfaces.
                         </p>
-                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                          Skilled in integrating cloud technologies and automation tools to deliver end-to-end solutions that are both efficient and adaptable. Strong background in developing AI-powered solutions that solve complex business problems.
+                        <p className="text-muted-foreground leading-relaxed">
+                          Experienced in building secure, scalable systems for real-world use cases, including voice-driven 
+                          applications and HIPAA-compliant data workflows that serve thousands of users.
                         </p>
-                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                          Specializing in building intelligent systems that automate workflows, enhance decision-making processes, and provide innovative solutions for healthcare, automation, and enterprise applications.
+                        <p className="text-muted-foreground leading-relaxed">
+                          Skilled in integrating cloud technologies and automation tools to deliver end-to-end solutions 
+                          that are both efficient and adaptable for enterprise applications.
                         </p>
-                        <div className="pt-4">
-                          <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Key Strengths:</h4>
-                          <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
-                            <li>• Effective Communication</li>
-                            <li>• Problem Solving abilities</li>
-                            <li>• Teamwork</li>
-                            <li>• Critical Thinking</li>
-                          </ul>
+                      </div>
+                      
+                      <div className="pt-6 border-t border-border/50">
+                        <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-primary" />
+                          Core Strengths
+                        </h4>
+                        <div className="grid grid-cols-2 gap-3">
+                          {['Effective Communication', 'Problem Solving', 'Team Leadership', 'Critical Thinking'].map((strength, index) => (
+                            <motion.div
+                              key={strength}
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ delay: 0.3 + index * 0.1 }}
+                              className="flex items-center gap-2 p-2 rounded-lg bg-primary/5 border border-primary/10"
+                            >
+                              <div className="w-2 h-2 rounded-full bg-primary" />
+                              <span className="text-sm font-medium text-foreground">{strength}</span>
+                            </motion.div>
+                          ))}
                         </div>
                       </div>
-                    </ScrollArea>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
               
-              {/* Skills Grid */}
+              {/* Enhanced Skills Grid */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
+                className="group"
               >
-                <Card className="shadow-lg">
+                <Card className="card-hover glass-card border-0 overflow-hidden h-full">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-6">Technical Skills</h3>
-                    <ScrollArea className="h-64 pr-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {Object.entries(skillsByCategory).map(([category, categorySkills], index) => {
-                          const IconComponent = getIconForCategory(category);
-                          return (
-                            <motion.div
-                              key={category}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.6 + index * 0.1 }}
-                            >
-                              <div className="flex items-center mb-2">
-                                <IconComponent className="w-5 h-5 text-primary mr-2" />
-                                <h4 className="font-semibold text-primary">{category}</h4>
-                              </div>
-                              <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
-                                {(categorySkills as Skill[]).map((skill: Skill) => (
-                                  <li key={skill.id}>{skill.name}</li>
-                                ))}
-                              </ul>
-                            </motion.div>
-                          );
-                        })}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-secondary to-primary flex items-center justify-center">
+                        <Database className="w-5 h-5 text-white" />
                       </div>
-                    </ScrollArea>
+                      <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                        Technical Expertise
+                      </h3>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      {Object.entries(skillsByCategory).map(([category, categorySkills], index) => {
+                        const IconComponent = getIconForCategory(category);
+                        return (
+                          <motion.div
+                            key={category}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.6 + index * 0.1 }}
+                            className="p-4 rounded-lg glass-card border border-primary/10 hover:border-primary/20 transition-all duration-300"
+                          >
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <IconComponent className="w-4 h-4 text-primary" />
+                              </div>
+                              <h4 className="font-semibold text-foreground">{category}</h4>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {(categorySkills as Skill[]).map((skill: Skill) => (
+                                <motion.span
+                                  key={skill.id}
+                                  whileHover={{ scale: 1.05 }}
+                                  className="px-3 py-1 text-xs font-medium bg-primary/5 text-primary rounded-full border border-primary/10 hover:border-primary/20 transition-all duration-300"
+                                >
+                                  {skill.name}
+                                </motion.span>
+                              ))}
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -314,6 +412,6 @@ export function About() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,0 +1,57 @@
+I want to redesign my existing 5-page website (Home, About, Projects, Blog, Contact) without altering the core functionalities or structure. However, I want a complete visual and experiential overhaul that feels modern, elegant, and cohesive across all pages—not just the homepage.
+
+Design Goals:
+Consistent Theming Across Pages:
+
+Ensure all pages follow the same design language, spacing system, and typography.
+
+Avoid inconsistent layouts or style mismatches between pages.
+
+Dark Mode / Light Mode Compatibility:
+
+Design should support theme toggling (light/dark mode) using CSS variables or prefers-color-scheme.
+
+Text and background colors should always maintain strong contrast ratios for readability.
+
+Avoid text colors blending into backgrounds in either theme.
+
+UI/UX Upgrade (without logic changes):
+
+Keep all existing functionality, routing, and content structure intact.
+
+Improve the visual hierarchy, margins, padding, and element alignment.
+
+Apply modern UI elements like smooth animations, hover effects, micro-interactions, and responsive grids/flex layouts.
+
+Typography & Color Palette:
+
+Use clean, legible fonts (e.g., Inter, Open Sans, Poppins, etc.).
+
+Incorporate a refined color palette with elegant accent colors that complement both themes.
+
+Avoid harsh tones; keep the visual tone professional yet inviting.
+
+Hero Section on Homepage:
+
+The homepage contains my name and a subtitle/descriptor.
+
+Enhance this section with a subtle animated background that is:
+
+Not overwhelming or too bright.
+
+Optionally includes interactive particle or motion effects that respond to cursor movement.
+
+Fully responsive and doesn’t impact performance.
+
+Classic + Modern Aesthetic Fusion:
+
+Blend classic design principles (balance, alignment, consistent UI spacing) with modern aesthetics like neumorphism, glassmorphism, or clean card-based layouts.
+
+Mobile and Accessibility:
+
+Ensure responsive design for all viewports.
+
+Follow accessibility best practices (contrast, alt texts, keyboard navigation).
+
+Final Note:
+I want the final website to feel completely refreshed visually but without disrupting the underlying navigation, interactivity, or content structure. Prioritize user experience, clean visuals, and a polished interface that reflects thoughtful design across all five pages.

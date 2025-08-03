@@ -259,17 +259,7 @@ export function Home() {
                       transition={{ delay: 2.2, duration: 0.4, ease: "easeOut" }}
                     />
                     
-                    {/* Pulsing energy center - Made bigger and more visible */}
-                    <motion.div
-                      className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-3 -mt-1.5 rounded-full bg-primary"
-                      animate={{ 
-                        scale: [1, 1.8, 1],
-                        opacity: [0.8, 1, 0.8]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                    >
-                      <div className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
-                    </motion.div>
+
                   </motion.div>
                 </motion.div>
               </motion.div>

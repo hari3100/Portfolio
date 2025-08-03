@@ -32,48 +32,98 @@ export function Home() {
         {/* Particle Background */}
         <ParticleBackground />
         
-        {/* Modern Floating Elements */}
+        {/* Flowing Energy Elements - Inspired by the uploaded ethereal image */}
         <motion.div 
           animate={{ 
-            y: [0, -20, 0],
-            rotate: [0, 10, 0],
-            scale: [1, 1.1, 1]
+            rotate: [0, 360],
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3]
           }}
           transition={{ 
-            duration: 8, 
+            duration: 20, 
             repeat: Infinity, 
             ease: "easeInOut" 
           }}
-          className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full blur-3xl opacity-40"
-        />
+          className="absolute top-1/4 right-1/4 w-96 h-96"
+        >
+          <div className="relative w-full h-full">
+            {/* Flowing streams */}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/30 to-primary/20 rounded-full blur-3xl"
+              animate={{
+                rotate: [0, 180, 360],
+                scale: [1, 1.3, 1]
+              }}
+              transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div 
+              className="absolute inset-4 bg-gradient-to-l from-secondary/15 via-primary/25 to-secondary/15 rounded-full blur-2xl"
+              animate={{
+                rotate: [360, 180, 0],
+                scale: [1.2, 1, 1.2]
+              }}
+              transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            />
+          </div>
+        </motion.div>
         
         <motion.div 
           animate={{ 
-            y: [0, 15, 0],
-            rotate: [0, -8, 0],
-            scale: [1, 0.9, 1]
+            rotate: [0, -360],
+            scale: [1, 1.1, 1],
+            x: [0, 30, 0],
+            y: [0, -20, 0]
           }}
           transition={{ 
-            duration: 10, 
+            duration: 25, 
             repeat: Infinity, 
             ease: "easeInOut",
-            delay: 2
+            delay: 5
           }}
-          className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-r from-secondary/25 to-primary/25 rounded-full blur-3xl opacity-30"
-        />
+          className="absolute bottom-1/4 left-1/4 w-80 h-80"
+        >
+          <div className="relative w-full h-full">
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-br from-secondary/20 via-primary/30 to-secondary/20 rounded-full blur-3xl"
+              animate={{
+                scale: [1, 1.4, 1],
+                opacity: [0.4, 0.7, 0.4]
+              }}
+              transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div 
+              className="absolute inset-8 bg-gradient-to-tl from-primary/15 via-secondary/25 to-primary/15 rounded-full blur-2xl"
+              animate={{
+                scale: [1.3, 1, 1.3],
+                rotate: [0, 90, 180]
+              }}
+              transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+            />
+          </div>
+        </motion.div>
         
-        {/* Geometric shapes */}
+        {/* Flowing Accent Lines */}
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/3 right-1/3 w-32 h-32 border border-primary/20 rounded-lg"
-        />
+          className="absolute top-1/2 left-0 w-full h-px opacity-20"
+          animate={{
+            scaleX: [0, 1, 0],
+            x: ['-100%', '0%', '100%']
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="w-full h-full bg-gradient-to-r from-transparent via-primary to-transparent" />
+        </motion.div>
         
         <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-1/3 left-1/3 w-24 h-24 border border-secondary/20 rounded-full"
-        />
+          className="absolute top-1/3 right-0 w-px h-64 opacity-20"
+          animate={{
+            scaleY: [0, 1, 0],
+            y: ['-100%', '0%', '100%']
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        >
+          <div className="w-full h-full bg-gradient-to-b from-transparent via-secondary to-transparent" />
+        </motion.div>
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
@@ -82,34 +132,94 @@ export function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              {/* Enhanced Hero Title */}
+              {/* Redesigned Hero Title - More Elegant and Flowing */}
               <motion.div 
-                className="relative inline-block mb-6"
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                className="relative mb-12"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <motion.h1 
-                  className="text-6xl md:text-8xl font-bold gradient-text leading-tight relative z-10"
-                  animate={{ 
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] 
-                  }}
-                  transition={{ 
-                    duration: 8, 
-                    repeat: Infinity,
-                    ease: "easeInOut" 
-                  }}
-                >
-                  Hi I'm Harikrishnan Nair
-                </motion.h1>
-                
-                {/* Glowing underline effect */}
+                {/* Elegant greeting */}
                 <motion.div
-                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-primary to-secondary rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: "60%" }}
-                  transition={{ delay: 0.8, duration: 1.2, ease: "easeOut" }}
-                />
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="mb-6"
+                >
+                  <motion.span 
+                    className="text-2xl md:text-3xl font-light text-muted-foreground/80 tracking-wider"
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    Hello, I'm
+                  </motion.span>
+                </motion.div>
+                
+                {/* Main name with flowing animation */}
+                <motion.div className="relative">
+                  <motion.h1 
+                    className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight relative z-10"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                  >
+                    <motion.span
+                      className="gradient-text inline-block"
+                      animate={{ 
+                        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] 
+                      }}
+                      transition={{ 
+                        duration: 8, 
+                        repeat: Infinity,
+                        ease: "easeInOut" 
+                      }}
+                    >
+                      Harikrishnan
+                    </motion.span>
+                    <br />
+                    <motion.span
+                      className="text-foreground/90 inline-block"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.8, duration: 0.6 }}
+                    >
+                      Nair
+                    </motion.span>
+                  </motion.h1>
+                  
+                  {/* Flowing underline elements */}
+                  <motion.div
+                    className="absolute -bottom-4 left-0 right-0 h-px"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 1.2, duration: 1.5, ease: "easeOut" }}
+                  >
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-transparent via-primary to-transparent"
+                      animate={{ 
+                        scaleX: [1, 1.2, 1],
+                        opacity: [0.5, 0.8, 0.5]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  </motion.div>
+                  
+                  <motion.div
+                    className="absolute -bottom-6 left-1/4 right-1/4 h-px"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 1.4, duration: 1.2, ease: "easeOut" }}
+                  >
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-transparent via-secondary to-transparent"
+                      animate={{ 
+                        scaleX: [1, 0.8, 1],
+                        opacity: [0.3, 0.6, 0.3]
+                      }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    />
+                  </motion.div>
+                </motion.div>
               </motion.div>
               
               <motion.div 

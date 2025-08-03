@@ -62,5 +62,21 @@
     "sortOrder": 3,
     "id": 4,
     "createdAt": "2025-08-03T10:43:22.583Z"
+  },
+  {
+    "githubRepoId": 689117078,
+    "name": "ECommerce_sales_dashboard_Excel",
+    "description": "Its a dynamic interactive excel dashboard that provides us the insights about the ecommerce store .",
+    "htmlUrl": "https://github.com/hari3100/ECommerce_sales_dashboard_Excel",
+    "language": "",
+    "stargazersCount": 0,
+    "forksCount": 0,
+    "isSelected": true,
+    "featured": false,
+    "imageUrl": "https://raw.githubusercontent.com/hari3100/ECommerce_sales_dashboard_Excel/main/showcaseimage.png",
+    "customDescription": null,
+    "sortOrder": 4,
+    "id": 5,
+    "createdAt": "2025-08-03T11:43:09.420Z"
   }
 ]

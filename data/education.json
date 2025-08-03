@@ -12,18 +12,6 @@
     "sortOrder": 0
   },
   {
-    "id": 2,
-    "courseName": "Bachelor of Science in Information Technology",
-    "collegeName": "EKNATH B. MADHAVI SENIOR COLLEGE",
-    "startMonth": "Aug",
-    "startYear": 2019,
-    "endMonth": "Mar",
-    "endYear": 2022,
-    "status": "completed",
-    "createdAt": "2025-08-02T19:53:14.965Z",
-    "sortOrder": 999
-  },
-  {
     "courseName": "Data science and Artificial Intelligence",
     "collegeName": "IT Vedant Institute ",
     "startMonth": "dec",
@@ -33,6 +21,18 @@
     "status": "completed",
     "id": 3,
     "createdAt": "2025-08-02T20:05:28.115Z",
-    "sortOrder": 999
+    "sortOrder": 1
+  },
+  {
+    "id": 2,
+    "courseName": "Bachelor of Science in Information Technology",
+    "collegeName": "EKNATH B. MADHAVI SENIOR COLLEGE",
+    "startMonth": "Aug",
+    "startYear": 2019,
+    "endMonth": "Mar",
+    "endYear": 2022,
+    "status": "completed",
+    "createdAt": "2025-08-02T19:53:14.965Z",
+    "sortOrder": 2
   }
 ]

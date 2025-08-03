@@ -26,6 +26,7 @@ export function Admin() {
   const [githubUsername, setGithubUsername] = useState('hari3100');
   const [githubRepos, setGithubRepos] = useState<any[]>([]);
   const [loadingRepos, setLoadingRepos] = useState(false);
+  const [refreshingImages, setRefreshingImages] = useState(false);
   const { toast } = useToast();
 
   // Blog form state
@@ -254,6 +255,21 @@ export function Admin() {
     }
   });
 
+  // Refresh showcase images mutation
+  const refreshShowcaseImagesMutation = useMutation({
+    mutationFn: () => apiRequest('POST', '/api/selected-projects/refresh-images', {}, { 'Authorization': 'Bearer admin123' }),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/selected-projects'] });
+      toast({ 
+        title: "Success", 
+        description: `Updated ${data.updatedCount} projects with showcase images` 
+      });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to refresh showcase images", variant: "destructive" });
+    }
+  });
+
   // Selected Project mutations
   const createSelectedProjectMutation = useMutation({
     mutationFn: (project: any) => apiRequest('POST', '/api/selected-projects', project, { 'Authorization': 'Bearer admin123' }),
@@ -373,6 +389,13 @@ export function Admin() {
       endMonth: edu.endMonth,
       endYear: edu.endYear,
       status: edu.status
+    });
+  };
+
+  const refreshShowcaseImages = () => {
+    setRefreshingImages(true);
+    refreshShowcaseImagesMutation.mutate(undefined, {
+      onSettled: () => setRefreshingImages(false)
     });
   };
 
@@ -820,9 +843,19 @@ export function Admin() {
               {/* Selected Projects Management */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <BookOpen className="w-5 h-5 mr-2" />
-                    Selected Projects ({(selectedProjects as SelectedProject[])?.length || 0})
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <BookOpen className="w-5 h-5 mr-2" />
+                      Selected Projects ({(selectedProjects as SelectedProject[])?.length || 0})
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => refreshShowcaseImages()}
+                      disabled={refreshingImages}
+                    >
+                      {refreshingImages ? 'Refreshing...' : 'Refresh Images'}
+                    </Button>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

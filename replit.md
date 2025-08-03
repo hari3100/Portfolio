@@ -41,13 +41,17 @@ Preferred communication style: Simple, everyday language.
 
 ### GitHub Integration
 - **Auto-sync**: Fetches repositories from GitHub user "hari3100"
-- **Project Categorization**: Automatic categorization based on language and keywords
+- **Project Categorization**: Automatic categorization based on language and keywords  
 - **Real-time Updates**: Projects update automatically when new repos are created
+- **Automatic Showcase Images**: Fetches showcase images (showcaseimage.jpg/png/jpeg, showcase.jpg/png/jpeg) from repos automatically when projects are added
+- **Image Management**: Admin can refresh showcase images for existing projects with bulk update functionality
 
 ### Admin Functionality
 - **Protected Routes**: Admin authentication for content management
 - **Media Uploads**: Image and video upload capability for projects
 - **Project Enhancement**: Custom descriptions and featured project selection
+- **Showcase Image Auto-Fetch**: Automatically detects and fetches showcase images from GitHub repositories when adding projects
+- **Bulk Image Refresh**: Admin interface to refresh showcase images for all existing projects
 
 ### Theme System
 - **Dark/Light Mode**: Persistent theme switching with system preference detection

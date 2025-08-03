@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertContactMessageSchema, insertProjectSchema, insertCertificationSchema, insertLinkedinPostSchema, insertSkillSchema, insertBlogSchema, insertContactInfoSchema, insertEducationSchema, insertSelectedProjectSchema, type SelectedProject } from "@shared/schema";
 import multer from "multer";
 import path from "path";
+import { fetchShowcaseImage } from "./githubImageFetcher";
 
 const upload = multer({ 
   dest: 'uploads/',
@@ -691,11 +692,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const validatedData = insertSelectedProjectSchema.parse(req.body);
+      
+      // Automatically fetch showcase image if not provided
+      if (!validatedData.imageUrl && validatedData.htmlUrl) {
+        try {
+          // Extract owner and repo name from GitHub URL
+          const urlParts = validatedData.htmlUrl.split('/');
+          const owner = urlParts[3]; // GitHub username
+          const repoName = urlParts[4]; // Repository name
+          
+          console.log(`Fetching showcase image for ${owner}/${repoName}`);
+          const imageResult = await fetchShowcaseImage(owner, repoName);
+          
+          if (imageResult.url) {
+            validatedData.imageUrl = imageResult.url;
+            console.log(`Found showcase image: ${imageResult.url}`);
+          } else {
+            console.log(`No showcase image found for ${repoName}`);
+          }
+        } catch (imageError) {
+          console.error(`Failed to fetch showcase image: ${imageError}`);
+          // Continue without image - it's not a critical error
+        }
+      }
+      
       const project = await storage.createSelectedProject(validatedData);
       res.json(project);
     } catch (error) {
       console.error("Create selected project error:", error);
       res.status(400).json({ error: "Invalid project data" });
+    }
+  });
+
+  // Bulk update showcase images for existing projects
+  app.post("/api/selected-projects/refresh-images", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const projects = await storage.getSelectedProjects();
+      let updatedCount = 0;
+      
+      for (const project of projects) {
+        // Only update if no image exists or if forced refresh
+        if (!project.imageUrl || req.body.forceRefresh) {
+          try {
+            // Extract owner and repo name from GitHub URL
+            const urlParts = project.htmlUrl.split('/');
+            const owner = urlParts[3]; // GitHub username
+            const repoName = urlParts[4]; // Repository name
+            
+            console.log(`Refreshing showcase image for ${owner}/${repoName}`);
+            const imageResult = await fetchShowcaseImage(owner, repoName);
+            
+            if (imageResult.url) {
+              await storage.updateSelectedProject(project.id, { imageUrl: imageResult.url });
+              updatedCount++;
+              console.log(`Updated ${project.name} with showcase image: ${imageResult.url}`);
+            }
+          } catch (imageError) {
+            console.error(`Failed to fetch showcase image for ${project.name}: ${imageError}`);
+          }
+        }
+      }
+
+      res.json({ 
+        message: `Updated ${updatedCount} projects with showcase images`,
+        updatedCount 
+      });
+    } catch (error) {
+      console.error("Refresh showcase images error:", error);
+      res.status(500).json({ error: "Failed to refresh showcase images" });
     }
   });
 

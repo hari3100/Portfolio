@@ -9,6 +9,10 @@ export interface GitHubRepo {
   updated_at: string;
   topics: string[];
   homepage: string | null;
+  owner?: {
+    login: string;
+  };
+  imageUrl?: string; // For compatibility with stored projects
 }
 
 export interface SkillTag {

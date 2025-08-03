@@ -10,7 +10,7 @@
     "isSelected": true,
     "featured": false,
     "customDescription": null,
-    "imageUrl": null,
+    "imageUrl": "https://raw.githubusercontent.com/hari3100/HR-Support-System/main/showcaseimage.png",
     "displayOrder": 0,
     "id": 1,
     "createdAt": "2025-08-02T20:25:55.282Z"
@@ -42,7 +42,7 @@
     "isSelected": true,
     "featured": false,
     "customDescription": null,
-    "imageUrl": null,
+    "imageUrl": "https://raw.githubusercontent.com/hari3100/Face-recognition-attendance-system/main/showcaseimage.png",
     "displayOrder": 2,
     "id": 3,
     "createdAt": "2025-08-02T20:26:28.264Z"

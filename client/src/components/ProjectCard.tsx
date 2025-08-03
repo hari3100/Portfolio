@@ -16,15 +16,24 @@ export function ProjectCard({ repo, onShowMore }: ProjectCardProps) {
   const [imageError, setImageError] = useState(false);
   const [showcaseImageError, setShowcaseImageError] = useState(false);
 
-  const showcaseImage = `https://raw.githubusercontent.com/${repo.owner.login}/${repo.name}/main/showcase.png`;
+  // Check if repo has a stored imageUrl (from database/storage)
+  const storedImageUrl = repo.imageUrl;
+  const showcaseImage = `https://raw.githubusercontent.com/${repo.owner?.login || 'hari3100'}/${repo.name}/main/showcase.png`;
   const defaultImage = `https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400`;
 
-  // Try showcase.png first, fallback to default if it doesn't exist
+  // Priority: stored imageUrl > showcase.png > default image
   const getImageSrc = () => {
+    if (storedImageUrl && !imageError) {
+      return storedImageUrl;
+    }
     if (!showcaseImageError) {
       return showcaseImage;
     }
     return defaultImage;
+  };
+
+  const hasCustomImage = () => {
+    return (storedImageUrl && !imageError) || (!showcaseImageError && !storedImageUrl);
   };
 
   return (
@@ -41,17 +50,17 @@ export function ProjectCard({ repo, onShowMore }: ProjectCardProps) {
             alt={`${repo.name} project`}
             className="w-full h-48 object-cover"
             onError={() => {
-              if (!showcaseImageError) {
-                setShowcaseImageError(true);
-              } else {
+              if (storedImageUrl && !imageError) {
                 setImageError(true);
+              } else if (!showcaseImageError) {
+                setShowcaseImageError(true);
               }
             }}
           />
-          {!showcaseImageError && (
+          {hasCustomImage() && (
             <div className="absolute top-2 left-2">
               <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                Custom Image
+                {storedImageUrl ? 'Showcase Image' : 'Custom Image'}
               </Badge>
             </div>
           )}

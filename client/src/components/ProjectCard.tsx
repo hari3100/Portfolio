@@ -15,19 +15,30 @@ interface ProjectCardProps {
 export function ProjectCard({ repo, onShowMore }: ProjectCardProps) {
   const [imageError, setImageError] = useState(false);
   const [showcaseImageError, setShowcaseImageError] = useState(false);
+  const [showcaseImageIndex, setShowcaseImageIndex] = useState(0);
 
   // Check if repo has a stored imageUrl (from database/storage)
   const storedImageUrl = repo.imageUrl;
-  const showcaseImage = `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcase.png`;
+  
+  // Try multiple showcase image variations
+  const showcaseImages = [
+    `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcaseimage.png`,
+    `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcaseimage.jpg`,
+    `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcaseimage.jpeg`,
+    `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcase.png`,
+    `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcase.jpg`,
+    `https://raw.githubusercontent.com/${repo.owner?.login || "hari3100"}/${repo.name}/main/showcase.jpeg`,
+  ];
+  
   const defaultImage = `https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400`;
 
-  // Priority: stored imageUrl > showcase.png > default image
+  // Priority: stored imageUrl > showcase images (try multiple variations) > default image
   const getImageSrc = () => {
     if (storedImageUrl && !imageError) {
       return storedImageUrl;
     }
-    if (!showcaseImageError) {
-      return showcaseImage;
+    if (!showcaseImageError && showcaseImageIndex < showcaseImages.length) {
+      return showcaseImages[showcaseImageIndex];
     }
     return defaultImage;
   };
@@ -35,7 +46,7 @@ export function ProjectCard({ repo, onShowMore }: ProjectCardProps) {
   const hasCustomImage = () => {
     return (
       (storedImageUrl && !imageError) ||
-      (!showcaseImageError && !storedImageUrl)
+      (!showcaseImageError && !storedImageUrl && showcaseImageIndex < showcaseImages.length)
     );
   };
 
@@ -55,6 +66,9 @@ export function ProjectCard({ repo, onShowMore }: ProjectCardProps) {
             onError={() => {
               if (storedImageUrl && !imageError) {
                 setImageError(true);
+              } else if (!showcaseImageError && showcaseImageIndex < showcaseImages.length - 1) {
+                // Try next showcase image variation
+                setShowcaseImageIndex(prev => prev + 1);
               } else if (!showcaseImageError) {
                 setShowcaseImageError(true);
               }

@@ -256,19 +256,7 @@ export function Admin() {
   });
 
   // Refresh showcase images mutation
-  const refreshShowcaseImagesMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/selected-projects/refresh-images', {}, { 'Authorization': 'Bearer admin123' }),
-    onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/selected-projects'] });
-      toast({ 
-        title: "Success", 
-        description: `Updated ${data.updatedCount} projects with showcase images` 
-      });
-    },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to refresh showcase images", variant: "destructive" });
-    }
-  });
+
 
   // Selected Project mutations
   const createSelectedProjectMutation = useMutation({
@@ -392,12 +380,7 @@ export function Admin() {
     });
   };
 
-  const refreshShowcaseImages = () => {
-    setRefreshingImages(true);
-    refreshShowcaseImagesMutation.mutate(undefined, {
-      onSettled: () => setRefreshingImages(false)
-    });
-  };
+
 
   const fetchGithubRepos = async () => {
     if (!githubUsername.trim()) {
@@ -435,6 +418,35 @@ export function Admin() {
       featured: false
     };
     createSelectedProjectMutation.mutate(projectData);
+  };
+
+  const refreshShowcaseImages = async (force = false) => {
+    setRefreshingImages(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await apiRequest('POST', '/api/projects/refresh-images', { force }, {
+        Authorization: `Bearer ${token}`
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        toast({ 
+          title: "Success", 
+          description: `Refreshed ${data.updatedCount} project images` 
+        });
+        // Refresh the projects query to show updated images
+        queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
+      }
+    } catch (error) {
+      console.error('Error refreshing images:', error);
+      toast({ 
+        title: "Error", 
+        description: "Failed to refresh showcase images", 
+        variant: "destructive" 
+      });
+    } finally {
+      setRefreshingImages(false);
+    }
   };
 
   const handleDeleteSelectedProject = (id: number) => {
@@ -793,9 +805,26 @@ export function Admin() {
                         onKeyDown={(e) => e.key === 'Enter' && fetchGithubRepos()}
                       />
                     </div>
-                    <Button onClick={fetchGithubRepos} disabled={loadingRepos}>
-                      {loadingRepos ? 'Fetching...' : 'Fetch Repositories'}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button onClick={fetchGithubRepos} disabled={loadingRepos}>
+                        {loadingRepos ? 'Fetching...' : 'Fetch Repositories'}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => refreshShowcaseImages(false)} 
+                        disabled={refreshingImages}
+                      >
+                        {refreshingImages ? 'Refreshing...' : 'Refresh Images'}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => refreshShowcaseImages(true)} 
+                        disabled={refreshingImages}
+                        className="text-xs"
+                      >
+                        Force Refresh All
+                      </Button>
+                    </div>
                     
                     {githubRepos.length > 0 && (
                       <div className="mt-4 max-h-80 overflow-y-auto space-y-2 w-full">

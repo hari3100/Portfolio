@@ -47,6 +47,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertProjectSchema.parse(req.body);
       
+      // Auto-fetch showcase image if not provided
+      if (!validatedData.imageUrl) {
+        try {
+          // Extract owner and repo name from GitHub data
+          const githubUrl = req.body.htmlUrl || req.body.html_url;
+          if (githubUrl) {
+            const urlParts = githubUrl.split("/");
+            const owner = urlParts[3]; // GitHub username
+            const repoName = urlParts[4]; // Repository name
+            
+            const imageResult = await fetchShowcaseImage(owner, repoName);
+            if (imageResult.url) {
+              validatedData.imageUrl = imageResult.url;
+              console.log(`Auto-fetched showcase image for ${validatedData.name}: ${imageResult.url}`);
+            }
+          }
+        } catch (imageError) {
+          console.log(`Failed to fetch showcase image for ${validatedData.name}:`, imageError);
+          // Continue without image - this is non-blocking
+        }
+      }
+      
       // Check if project with this GitHub ID already exists
       const existing = await storage.getProjectByGithubId(validatedData.githubId);
       
@@ -112,6 +134,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Contact form error:", error);
       res.status(400).json({ error: "Invalid form data" });
+    }
+  });
+
+  // Refresh showcase images for existing projects (admin only)
+  app.post("/api/projects/refresh-images", async (req, res) => {
+    try {
+      // Simple admin authentication
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const projects = await storage.getProjects();
+      let updatedCount = 0;
+
+      for (const project of projects) {
+        // Only refresh if no image exists or if forced
+        if (!project.imageUrl || req.body.force) {
+          try {
+            // Extract owner and repo name from project data
+            // For projects table, we'll construct the GitHub URL from the name
+            const owner = "hari3100"; // Default GitHub username
+            const repoName = project.name;
+
+            const imageResult = await fetchShowcaseImage(owner, repoName);
+            if (imageResult.url) {
+              await storage.updateProject(project.id, { imageUrl: imageResult.url });
+              console.log(`Refreshed showcase image for ${project.name}: ${imageResult.url}`);
+              updatedCount++;
+            }
+          } catch (error) {
+            console.log(`Failed to refresh image for ${project.name}:`, error);
+          }
+        }
+      }
+
+      res.json({ 
+        success: true, 
+        message: `Refreshed ${updatedCount} project images`,
+        updatedCount 
+      });
+    } catch (error) {
+      console.error("Refresh images error:", error);
+      res.status(500).json({ error: "Failed to refresh images" });
     }
   });
 

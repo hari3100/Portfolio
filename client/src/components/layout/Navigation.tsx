@@ -55,9 +55,6 @@ export function Navigation() {
                   <Sparkles className="w-6 h-6" />
                 </motion.div>
               </div>
-              <span className="text-xl font-bold gradient-text">
-                Harikrishnan Nair
-              </span>
             </motion.div>
           </Link>
           

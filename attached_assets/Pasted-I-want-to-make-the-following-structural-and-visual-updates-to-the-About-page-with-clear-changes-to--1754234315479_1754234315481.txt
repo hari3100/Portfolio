@@ -1,0 +1,58 @@
+I want to make the following structural and visual updates to the About page, with clear changes to layout and component behavior — please ensure that the layout remains responsive, consistent in styling, and user-friendly.
+
+🧹 Section Removal:
+Completely remove the Professional Journey, Experience, and Expertise section along with its description paragraph ("With over 1.5 years...").
+
+This is redundant and already covered in detail within the Professional Background section.
+
+🔄 Section Rearrangement:
+As the top section (Professional Journey) is removed, the first visible element on the page should now be the intro paragraph (starts with "Passionate about AI...").
+
+Directly under that, the Professional Background section will appear on the left, and the Career Journey section should now appear on the right (swap positions with Education and Certification).
+
+🔧 Professional Background Section:
+Retain all content inside this section.
+
+Convert the content into a scrollable container, same as the styling and behavior of the Education and Certification section.
+
+Use the same fixed height and scrollbar behavior (auto-scroll on overflow, hidden scrollbar if possible).
+
+🔁 Career Journey Section:
+Just swap places with Education — move it above the Education and Certification section.
+
+No content changes needed.
+
+🧱 Technical Expertise Section:
+This section currently extends vertically without bounds as more skills are added — refactor it to avoid overwhelming the layout.
+
+✅ Required Changes:
+Wrap the entire Technical Expertise content inside a fixed-height scrollable block, again matching the height/style of Education and Certification.
+
+Display skill categories (Programming, AI Tools, etc.) in a two-column layout inside the scrollable area.
+
+Use CSS Grid or Flexbox for the column layout.
+
+If layout appears too crowded or unbalanced, fallback to showing only 3 skill categories at a time, with the rest scrollable below.
+
+Ensure that each category heading (e.g., "Programming") has its list items indented or styled cleanly underneath.
+
+Avoid awkward spacing or alignment issues.
+
+Maintain clean padding/margin between categories.
+
+🎨 Visual Consistency:
+All scrollable blocks (Professional Background, Technical Expertise, Education & Certification) must:
+
+Have the same fixed height
+
+Share similar padding, background, border-radius, and font sizing
+
+Scroll only when content exceeds block height (overflow-y: auto)
+
+Final Layout Structure (Top to Bottom):
+
+1. Intro Paragraph ("Passionate about AI...")
+2. Left: Professional Background (scrollable)
+   Right: Career Journey
+3. Education & Certification (moved below the Career Journey)
+4. Technical Expertise (scrollable, two-column below the  Professional Background)

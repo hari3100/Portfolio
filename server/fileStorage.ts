@@ -286,6 +286,25 @@ export class FileStorage implements IStorage {
     return false;
   }
 
+  async reorderCertifications(reorderedIds: number[]): Promise<boolean> {
+    try {
+      const certifications = await this.getCertifications();
+      const reorderedCertifications = certifications.map(cert => {
+        const newIndex = reorderedIds.indexOf(cert.id);
+        return {
+          ...cert,
+          sortOrder: newIndex >= 0 ? newIndex : 999
+        };
+      }).sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      await this.writeJsonFile('certifications.json', reorderedCertifications);
+      return true;
+    } catch (error) {
+      console.error('Error reordering certifications:', error);
+      return false;
+    }
+  }
+
   // LinkedIn Post methods
   async getLinkedinPosts(): Promise<LinkedinPost[]> {
     const posts = await this.readJsonFile<LinkedinPost[]>('linkedinPosts.json', []);
@@ -336,6 +355,25 @@ export class FileStorage implements IStorage {
     return false;
   }
 
+  async reorderLinkedinPosts(reorderedIds: number[]): Promise<boolean> {
+    try {
+      const posts = await this.readJsonFile<LinkedinPost[]>('linkedinPosts.json', []);
+      const reorderedPosts = posts.map(post => {
+        const newIndex = reorderedIds.indexOf(post.id);
+        return {
+          ...post,
+          sortOrder: newIndex >= 0 ? newIndex : 999
+        };
+      }).sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      await this.writeJsonFile('linkedinPosts.json', reorderedPosts);
+      return true;
+    } catch (error) {
+      console.error('Error reordering LinkedIn posts:', error);
+      return false;
+    }
+  }
+
   // Skill methods
   async getSkills(): Promise<Skill[]> {
     return await this.readJsonFile<Skill[]>('skills.json', []);
@@ -381,6 +419,25 @@ export class FileStorage implements IStorage {
       return true;
     }
     return false;
+  }
+
+  async reorderSkills(reorderedIds: number[]): Promise<boolean> {
+    try {
+      const skills = await this.getSkills();
+      const reorderedSkills = skills.map(skill => {
+        const newIndex = reorderedIds.indexOf(skill.id);
+        return {
+          ...skill,
+          sortOrder: newIndex >= 0 ? newIndex : 999
+        };
+      }).sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      await this.writeJsonFile('skills.json', reorderedSkills);
+      return true;
+    } catch (error) {
+      console.error('Error reordering skills:', error);
+      return false;
+    }
   }
 
   // Blog methods
@@ -430,6 +487,25 @@ export class FileStorage implements IStorage {
       return true;
     }
     return false;
+  }
+
+  async reorderBlogs(reorderedIds: number[]): Promise<boolean> {
+    try {
+      const blogs = await this.readJsonFile<Blog[]>('blogs.json', []);
+      const reorderedBlogs = blogs.map(blog => {
+        const newIndex = reorderedIds.indexOf(blog.id);
+        return {
+          ...blog,
+          sortOrder: newIndex >= 0 ? newIndex : 999
+        };
+      }).sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      await this.writeJsonFile('blogs.json', reorderedBlogs);
+      return true;
+    } catch (error) {
+      console.error('Error reordering blogs:', error);
+      return false;
+    }
   }
 
   // Contact Info methods
@@ -500,6 +576,25 @@ export class FileStorage implements IStorage {
     return false;
   }
 
+  async reorderEducation(reorderedIds: number[]): Promise<boolean> {
+    try {
+      const educationList = await this.readJsonFile<Education[]>('education.json', []);
+      const reorderedEducation = educationList.map(edu => {
+        const newIndex = reorderedIds.indexOf(edu.id);
+        return {
+          ...edu,
+          sortOrder: newIndex >= 0 ? newIndex : 999
+        };
+      }).sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      await this.writeJsonFile('education.json', reorderedEducation);
+      return true;
+    } catch (error) {
+      console.error('Error reordering education:', error);
+      return false;
+    }
+  }
+
   // Selected Project methods
   async getSelectedProjects(): Promise<SelectedProject[]> {
     const projects = await this.readJsonFile<SelectedProject[]>('selectedProjects.json', []);
@@ -548,6 +643,25 @@ export class FileStorage implements IStorage {
       return true;
     }
     return false;
+  }
+
+  async reorderSelectedProjects(reorderedIds: number[]): Promise<boolean> {
+    try {
+      const projects = await this.readJsonFile<SelectedProject[]>('selectedProjects.json', []);
+      const reorderedProjects = projects.map(project => {
+        const newIndex = reorderedIds.indexOf(project.id);
+        return {
+          ...project,
+          sortOrder: newIndex >= 0 ? newIndex : 999
+        };
+      }).sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      await this.writeJsonFile('selectedProjects.json', reorderedProjects);
+      return true;
+    } catch (error) {
+      console.error('Error reordering selected projects:', error);
+      return false;
+    }
   }
 
   async initializeData() {

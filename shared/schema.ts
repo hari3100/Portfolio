@@ -38,6 +38,7 @@ export const certifications = pgTable("certifications", {
   imageUrl: text("image_url"),
   description: text("description"),
   featured: boolean("featured").default(false),
+  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -50,6 +51,7 @@ export const linkedinPosts = pgTable("linkedin_posts", {
   likes: integer("likes").default(0),
   comments: integer("comments").default(0),
   featured: boolean("featured").default(false),
+  sortOrder: integer("sort_order").default(0),
   publishedAt: timestamp("published_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -60,6 +62,7 @@ export const skills = pgTable("skills", {
   category: text("category").notNull(),
   logoUrl: text("logo_url"),
   featured: boolean("featured").default(false),
+  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -71,6 +74,7 @@ export const blogs = pgTable("blogs", {
   imageUrl: text("image_url"),
   publishedAt: timestamp("published_at").notNull(),
   featured: boolean("featured").default(false),
+  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -93,6 +97,7 @@ export const education = pgTable("education", {
   endMonth: text("end_month").notNull(),
   endYear: integer("end_year").notNull(),
   status: text("status").notNull(), // "completed", "in progress", "to begin", "dropped off"
+  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -163,7 +168,7 @@ export const selectedProjects = pgTable("selected_projects", {
   customDescription: text("custom_description"),
   imageUrl: text("image_url"),
   featured: boolean("featured").default(false),
-  displayOrder: integer("display_order").default(0),
+  sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

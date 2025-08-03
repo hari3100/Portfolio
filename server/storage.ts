@@ -18,24 +18,28 @@ export interface IStorage {
   createCertification(certification: InsertCertification): Promise<Certification>;
   updateCertification(id: number, updates: Partial<InsertCertification>): Promise<Certification | undefined>;
   deleteCertification(id: number): Promise<boolean>;
+  reorderCertifications(reorderedIds: number[]): Promise<boolean>;
 
   getLinkedinPosts(): Promise<LinkedinPost[]>;
   getFeaturedLinkedinPosts(): Promise<LinkedinPost[]>;
   createLinkedinPost(post: InsertLinkedinPost): Promise<LinkedinPost>;
   updateLinkedinPost(id: number, updates: Partial<InsertLinkedinPost>): Promise<LinkedinPost | undefined>;
   deleteLinkedinPost(id: number): Promise<boolean>;
+  reorderLinkedinPosts(reorderedIds: number[]): Promise<boolean>;
 
   getSkills(): Promise<Skill[]>;
   getFeaturedSkills(): Promise<Skill[]>;
   createSkill(skill: InsertSkill): Promise<Skill>;
   updateSkill(id: number, updates: Partial<InsertSkill>): Promise<Skill | undefined>;
   deleteSkill(id: number): Promise<boolean>;
+  reorderSkills(reorderedIds: number[]): Promise<boolean>;
 
   getBlogs(): Promise<Blog[]>;
   getFeaturedBlogs(): Promise<Blog[]>;
   createBlog(blog: InsertBlog): Promise<Blog>;
   updateBlog(id: number, updates: Partial<InsertBlog>): Promise<Blog | undefined>;
   deleteBlog(id: number): Promise<boolean>;
+  reorderBlogs(reorderedIds: number[]): Promise<boolean>;
 
   getContactInfo(): Promise<ContactInfo | undefined>;
   createContactInfo(contactInfo: InsertContactInfo): Promise<ContactInfo>;
@@ -45,11 +49,13 @@ export interface IStorage {
   createEducation(education: InsertEducation): Promise<Education>;
   updateEducation(id: number, updates: Partial<InsertEducation>): Promise<Education | undefined>;
   deleteEducation(id: number): Promise<boolean>;
+  reorderEducation(reorderedIds: number[]): Promise<boolean>;
 
   getSelectedProjects(): Promise<SelectedProject[]>;
   createSelectedProject(project: InsertSelectedProject): Promise<SelectedProject>;
   updateSelectedProject(id: number, updates: Partial<InsertSelectedProject>): Promise<SelectedProject | undefined>;
   deleteSelectedProject(id: number): Promise<boolean>;
+  reorderSelectedProjects(reorderedIds: number[]): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -254,6 +260,7 @@ export class MemStorage implements IStorage {
       imageUrl: insertCertification.imageUrl ?? null,
       description: insertCertification.description ?? null,
       featured: insertCertification.featured ?? false,
+      sortOrder: insertCertification.sortOrder ?? 0,
       createdAt: new Date(),
     };
     this.certifications.set(certification.id, certification);
@@ -271,6 +278,17 @@ export class MemStorage implements IStorage {
 
   async deleteCertification(id: number): Promise<boolean> {
     return this.certifications.delete(id);
+  }
+
+  async reorderCertifications(reorderedIds: number[]): Promise<boolean> {
+    reorderedIds.forEach((id, index) => {
+      const certification = this.certifications.get(id);
+      if (certification) {
+        certification.sortOrder = index;
+        this.certifications.set(id, certification);
+      }
+    });
+    return true;
   }
 
   // LinkedIn Posts
@@ -294,6 +312,7 @@ export class MemStorage implements IStorage {
       likes: insertPost.likes ?? 0,
       comments: insertPost.comments ?? 0,
       featured: insertPost.featured ?? false,
+      sortOrder: insertPost.sortOrder ?? 0,
       id,
       createdAt: new Date(),
     };
@@ -314,6 +333,17 @@ export class MemStorage implements IStorage {
     return this.linkedinPosts.delete(id);
   }
 
+  async reorderLinkedinPosts(reorderedIds: number[]): Promise<boolean> {
+    reorderedIds.forEach((id, index) => {
+      const post = this.linkedinPosts.get(id);
+      if (post) {
+        post.sortOrder = index;
+        this.linkedinPosts.set(id, post);
+      }
+    });
+    return true;
+  }
+
   // Skills
   async getSkills(): Promise<Skill[]> {
     return Array.from(this.skills.values());
@@ -329,6 +359,7 @@ export class MemStorage implements IStorage {
       ...insertSkill,
       logoUrl: insertSkill.logoUrl ?? null,
       featured: insertSkill.featured ?? false,
+      sortOrder: insertSkill.sortOrder ?? 0,
       id,
       createdAt: new Date(),
     };
@@ -347,6 +378,17 @@ export class MemStorage implements IStorage {
 
   async deleteSkill(id: number): Promise<boolean> {
     return this.skills.delete(id);
+  }
+
+  async reorderSkills(reorderedIds: number[]): Promise<boolean> {
+    reorderedIds.forEach((id, index) => {
+      const skill = this.skills.get(id);
+      if (skill) {
+        skill.sortOrder = index;
+        this.skills.set(id, skill);
+      }
+    });
+    return true;
   }
 
   // Blog methods
@@ -369,6 +411,7 @@ export class MemStorage implements IStorage {
       description: insertBlog.description ?? null,
       imageUrl: insertBlog.imageUrl ?? null,
       featured: insertBlog.featured ?? false,
+      sortOrder: insertBlog.sortOrder ?? 0,
       id,
       createdAt: new Date(),
     };
@@ -387,6 +430,17 @@ export class MemStorage implements IStorage {
 
   async deleteBlog(id: number): Promise<boolean> {
     return this.blogs.delete(id);
+  }
+
+  async reorderBlogs(reorderedIds: number[]): Promise<boolean> {
+    reorderedIds.forEach((id, index) => {
+      const blog = this.blogs.get(id);
+      if (blog) {
+        blog.sortOrder = index;
+        this.blogs.set(id, blog);
+      }
+    });
+    return true;
   }
 
   // Contact Info methods
@@ -425,6 +479,7 @@ export class MemStorage implements IStorage {
   async createEducation(education: InsertEducation): Promise<Education> {
     const newEducation: Education = {
       ...education,
+      sortOrder: education.sortOrder ?? 0,
       id: 1,
       createdAt: new Date()
     };
@@ -437,6 +492,44 @@ export class MemStorage implements IStorage {
 
   async deleteEducation(id: number): Promise<boolean> {
     return false;
+  }
+
+  async reorderEducation(reorderedIds: number[]): Promise<boolean> {
+    return false; // Not implemented for MemStorage
+  }
+
+  async getSelectedProjects(): Promise<SelectedProject[]> {
+    return [];
+  }
+
+  async createSelectedProject(project: InsertSelectedProject): Promise<SelectedProject> {
+    const newProject: SelectedProject = {
+      ...project,
+      description: project.description ?? null,
+      language: project.language ?? null,
+      imageUrl: project.imageUrl ?? null,
+      customDescription: project.customDescription ?? null,
+      featured: project.featured ?? false,
+      isSelected: project.isSelected ?? true,
+      stargazersCount: project.stargazersCount ?? 0,
+      forksCount: project.forksCount ?? 0,
+      sortOrder: project.sortOrder ?? 0,
+      id: 1,
+      createdAt: new Date(),
+    };
+    return newProject;
+  }
+
+  async updateSelectedProject(id: number, updates: Partial<InsertSelectedProject>): Promise<SelectedProject | undefined> {
+    return undefined;
+  }
+
+  async deleteSelectedProject(id: number): Promise<boolean> {
+    return false;
+  }
+
+  async reorderSelectedProjects(reorderedIds: number[]): Promise<boolean> {
+    return false; // Not implemented for MemStorage
   }
 
   async initializeData() {

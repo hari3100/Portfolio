@@ -206,6 +206,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/certifications/reorder", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { reorderedIds } = req.body;
+      if (!Array.isArray(reorderedIds)) {
+        return res.status(400).json({ error: "reorderedIds must be an array" });
+      }
+
+      const success = await storage.reorderCertifications(reorderedIds);
+      res.json({ success });
+    } catch (error) {
+      console.error("Reorder certifications error:", error);
+      res.status(500).json({ error: "Failed to reorder certifications" });
+    }
+  });
+
   // LinkedIn Posts API
   app.get("/api/linkedin-posts", async (req, res) => {
     try {
@@ -285,6 +305,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Delete LinkedIn post error:", error);
       res.status(500).json({ error: "Failed to delete LinkedIn post" });
+    }
+  });
+
+  app.put("/api/linkedin-posts/reorder", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { reorderedIds } = req.body;
+      if (!Array.isArray(reorderedIds)) {
+        return res.status(400).json({ error: "reorderedIds must be an array" });
+      }
+
+      const success = await storage.reorderLinkedinPosts(reorderedIds);
+      res.json({ success });
+    } catch (error) {
+      console.error("Reorder LinkedIn posts error:", error);
+      res.status(500).json({ error: "Failed to reorder LinkedIn posts" });
     }
   });
 
@@ -370,6 +410,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/skills/reorder", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { reorderedIds } = req.body;
+      if (!Array.isArray(reorderedIds)) {
+        return res.status(400).json({ error: "reorderedIds must be an array" });
+      }
+
+      const success = await storage.reorderSkills(reorderedIds);
+      res.json({ success });
+    } catch (error) {
+      console.error("Reorder skills error:", error);
+      res.status(500).json({ error: "Failed to reorder skills" });
+    }
+  });
+
   // Blog API
   app.get("/api/blogs", async (req, res) => {
     try {
@@ -447,6 +507,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Delete blog error:", error);
       res.status(500).json({ error: "Failed to delete blog" });
+    }
+  });
+
+  app.put("/api/blogs/reorder", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { reorderedIds } = req.body;
+      if (!Array.isArray(reorderedIds)) {
+        return res.status(400).json({ error: "reorderedIds must be an array" });
+      }
+
+      const success = await storage.reorderBlogs(reorderedIds);
+      res.json({ success });
+    } catch (error) {
+      console.error("Reorder blogs error:", error);
+      res.status(500).json({ error: "Failed to reorder blogs" });
     }
   });
 
@@ -569,6 +649,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/education/reorder", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { reorderedIds } = req.body;
+      if (!Array.isArray(reorderedIds)) {
+        return res.status(400).json({ error: "reorderedIds must be an array" });
+      }
+
+      const success = await storage.reorderEducation(reorderedIds);
+      res.json({ success });
+    } catch (error) {
+      console.error("Reorder education error:", error);
+      res.status(500).json({ error: "Failed to reorder education" });
+    }
+  });
+
   // Selected Projects API
   app.get("/api/selected-projects", async (req, res) => {
     try {
@@ -636,6 +736,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Delete selected project error:", error);
       res.status(500).json({ error: "Failed to delete selected project" });
+    }
+  });
+
+  app.put("/api/selected-projects/reorder", async (req, res) => {
+    try {
+      const adminPassword = req.headers.authorization;
+      if (adminPassword !== "Bearer admin123") {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { reorderedIds } = req.body;
+      if (!Array.isArray(reorderedIds)) {
+        return res.status(400).json({ error: "reorderedIds must be an array" });
+      }
+
+      const success = await storage.reorderSelectedProjects(reorderedIds);
+      res.json({ success });
+    } catch (error) {
+      console.error("Reorder selected projects error:", error);
+      res.status(500).json({ error: "Failed to reorder selected projects" });
     }
   });
 

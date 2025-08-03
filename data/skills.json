@@ -22,5 +22,14 @@
     "logoUrl": "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/aws-color.png",
     "featured": true,
     "createdAt": "2025-08-02T09:46:14.965Z"
+  },
+  {
+    "name": "LangChain",
+    "category": "LLM Framework",
+    "logoUrl": "https://imgs.search.brave.com/7zdoCD0RQn6H_SB0iaOWT3z7cnXN6Cd33xAOpcm46vk/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9jZG4u/YnJhbmRmZXRjaC5p/by9pZHpmN1NqbzI4/L3cvNDAwL2gvNDAw/L3RoZW1lL2Rhcmsv/aWNvbi5qcGVnP2M9/MWJ4aWQ2NE11cDdh/Y3pld1NBWU1YJnQ9/MTc1MTQzODg4NjU2/MQ",
+    "featured": true,
+    "id": 4,
+    "createdAt": "2025-08-03T06:25:50.825Z"
   }
+  
 ]

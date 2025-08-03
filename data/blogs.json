@@ -7,6 +7,7 @@
     "publishedAt": "2025-06-29T00:00:00.000Z",
     "featured": false,
     "id": 3,
-    "createdAt": "2025-08-02T09:53:58.155Z"
+    "createdAt": "2025-08-02T09:53:58.155Z",
+    "sortOrder": 999
   }
 ]

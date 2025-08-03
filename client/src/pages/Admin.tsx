@@ -889,36 +889,42 @@ export function Admin() {
                     </Button>
                     
                     {githubRepos.length > 0 && (
-                      <div className="mt-4 max-h-64 overflow-y-auto space-y-2">
+                      <div className="mt-4 max-h-80 overflow-y-auto space-y-2 w-full">
                         <h4 className="font-semibold">Available Repositories ({githubRepos.length})</h4>
-                        {githubRepos.map((repo) => {
-                          const isAlreadySelected = (selectedProjects as SelectedProject[])?.some(
-                            p => p.githubRepoId === repo.id
-                          );
-                          return (
-                            <div key={repo.id} className="flex items-center justify-between p-2 border rounded">
-                              <div className="flex-1">
-                                <p className="font-medium text-sm">{repo.name}</p>
-                                <p className="text-xs text-gray-500">
-                                  {repo.language} • ⭐ {repo.stargazers_count} • 🍴 {repo.forks_count}
-                                </p>
-                                {repo.description && (
-                                  <p className="text-xs text-gray-600 mt-1 truncate">
-                                    {repo.description}
+                        <div className="space-y-2">
+                          {githubRepos.map((repo) => {
+                            const isAlreadySelected = (selectedProjects as SelectedProject[])?.some(
+                              p => p.githubRepoId === repo.id
+                            );
+                            return (
+                              <div key={repo.id} className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50 dark:bg-gray-800 w-full">
+                                <div className="flex-1 min-w-0 overflow-hidden">
+                                  <p className="font-medium text-sm text-gray-900 dark:text-white break-words">
+                                    {repo.name}
                                   </p>
-                                )}
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    {repo.language && `${repo.language} • `}⭐ {repo.stargazers_count} • 🍴 {repo.forks_count}
+                                  </p>
+                                  {repo.description && (
+                                    <p className="text-xs text-gray-600 dark:text-gray-300 mt-2 line-clamp-2 break-words">
+                                      {repo.description}
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="flex-shrink-0">
+                                  <Button
+                                    size="sm"
+                                    variant={isAlreadySelected ? "secondary" : "default"}
+                                    onClick={() => addProjectToSelected(repo)}
+                                    disabled={isAlreadySelected || createSelectedProjectMutation.isPending}
+                                  >
+                                    {isAlreadySelected ? 'Added' : 'Add'}
+                                  </Button>
+                                </div>
                               </div>
-                              <Button
-                                size="sm"
-                                variant={isAlreadySelected ? "secondary" : "default"}
-                                onClick={() => addProjectToSelected(repo)}
-                                disabled={isAlreadySelected || createSelectedProjectMutation.isPending}
-                              >
-                                {isAlreadySelected ? 'Added' : 'Add'}
-                              </Button>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>

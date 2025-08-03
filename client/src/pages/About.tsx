@@ -110,19 +110,7 @@ export function About() {
 
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
-          {/* Intro Paragraph */}
-          <motion.div 
-            className="text-center mb-20 py-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Passionate about AI innovation and developing cutting-edge solutions that transform complex challenges into intelligent, 
-              scalable systems using machine learning, deep learning, and cloud technologies.
-            </p>
-          </motion.div>
+          
           
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Professional Background - Left Side */}

@@ -219,55 +219,57 @@ export function Home() {
                       />
                     </motion.div>
                     
-                    {/* Left branching lines */}
+                    {/* Left branching lines - Made bigger and more visible */}
                     <motion.div
-                      className="absolute top-0 left-1/2 w-px h-4 bg-gradient-to-b from-primary/60 to-transparent origin-bottom"
+                      className="absolute top-0 left-1/2 w-0.5 h-6 bg-gradient-to-b from-primary/80 to-transparent origin-bottom"
                       initial={{ scaleY: 0, rotate: 0 }}
                       animate={{ scaleY: 1, rotate: -25 }}
                       transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
                     />
                     <motion.div
-                      className="absolute top-0 left-1/2 w-px h-6 bg-gradient-to-b from-secondary/40 to-transparent origin-bottom"
+                      className="absolute top-0 left-1/2 w-0.5 h-8 bg-gradient-to-b from-secondary/60 to-transparent origin-bottom"
                       initial={{ scaleY: 0, rotate: 0 }}
                       animate={{ scaleY: 1, rotate: -45 }}
                       transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
                     />
                     <motion.div
-                      className="absolute top-0 left-1/2 w-px h-3 bg-gradient-to-b from-primary/30 to-transparent origin-bottom"
+                      className="absolute top-0 left-1/2 w-0.5 h-5 bg-gradient-to-b from-primary/50 to-transparent origin-bottom"
                       initial={{ scaleY: 0, rotate: 0 }}
                       animate={{ scaleY: 1, rotate: -15 }}
                       transition={{ delay: 2.2, duration: 0.4, ease: "easeOut" }}
                     />
                     
-                    {/* Right branching lines */}
+                    {/* Right branching lines - Made bigger and more visible */}
                     <motion.div
-                      className="absolute top-0 right-1/2 w-px h-4 bg-gradient-to-b from-primary/60 to-transparent origin-bottom"
+                      className="absolute top-0 right-1/2 w-0.5 h-6 bg-gradient-to-b from-primary/80 to-transparent origin-bottom"
                       initial={{ scaleY: 0, rotate: 0 }}
                       animate={{ scaleY: 1, rotate: 25 }}
                       transition={{ delay: 1.8, duration: 0.8, ease: "easeOut" }}
                     />
                     <motion.div
-                      className="absolute top-0 right-1/2 w-px h-6 bg-gradient-to-b from-secondary/40 to-transparent origin-bottom"
+                      className="absolute top-0 right-1/2 w-0.5 h-8 bg-gradient-to-b from-secondary/60 to-transparent origin-bottom"
                       initial={{ scaleY: 0, rotate: 0 }}
                       animate={{ scaleY: 1, rotate: 45 }}
                       transition={{ delay: 2.0, duration: 0.6, ease: "easeOut" }}
                     />
                     <motion.div
-                      className="absolute top-0 right-1/2 w-px h-3 bg-gradient-to-b from-primary/30 to-transparent origin-bottom"
+                      className="absolute top-0 right-1/2 w-0.5 h-5 bg-gradient-to-b from-primary/50 to-transparent origin-bottom"
                       initial={{ scaleY: 0, rotate: 0 }}
                       animate={{ scaleY: 1, rotate: 15 }}
                       transition={{ delay: 2.2, duration: 0.4, ease: "easeOut" }}
                     />
                     
-                    {/* Pulsing energy center */}
+                    {/* Pulsing energy center - Made bigger and more visible */}
                     <motion.div
-                      className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-2 -mt-1 rounded-full bg-primary/80"
+                      className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-3 -mt-1.5 rounded-full bg-primary"
                       animate={{ 
-                        scale: [1, 1.5, 1],
-                        opacity: [0.6, 1, 0.6]
+                        scale: [1, 1.8, 1],
+                        opacity: [0.8, 1, 0.8]
                       }}
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                    />
+                    >
+                      <div className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
+                    </motion.div>
                   </motion.div>
                 </motion.div>
               </motion.div>

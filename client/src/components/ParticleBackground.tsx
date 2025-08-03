@@ -39,8 +39,8 @@ export function ParticleBackground() {
           y: Math.random() * canvas.height,
           vx: (Math.random() - 0.5) * 0.5,
           vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.6 + 0.2,
+          size: Math.random() * 4 + 2,
+          opacity: Math.random() * 0.8 + 0.4,
           color: Math.random() > 0.5 ? '#3b82f6' : '#8b5cf6',
         });
       }
@@ -69,12 +69,12 @@ export function ParticleBackground() {
           particle.vy += (dy / distance) * magneticForce * 0.02;
           
           // Dynamic size based on proximity
-          particle.size = Math.max(1, Math.min(6, particle.size + force * 2));
-          particle.opacity = Math.max(0.2, Math.min(1, particle.opacity + force * 0.5));
+          particle.size = Math.max(2, Math.min(8, particle.size + force * 3));
+          particle.opacity = Math.max(0.4, Math.min(1, particle.opacity + force * 0.6));
         } else {
           // Reset size and opacity when away from cursor
-          particle.size = Math.max(1, particle.size * 0.98);
-          particle.opacity = Math.max(0.2, particle.opacity * 0.99);
+          particle.size = Math.max(2, particle.size * 0.98);
+          particle.opacity = Math.max(0.4, particle.opacity * 0.99);
         }
         
         // Boundary check

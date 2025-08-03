@@ -75,6 +75,7 @@ export class FileStorage implements IStorage {
           imageUrl: "https://miro.medium.com/v2/resize:fit:1400/1*8K4bwQQEjk_1vfN2K8yKHA.jpeg",
           publishedAt: new Date('2024-01-15'),
           featured: true,
+          sortOrder: 0,
           createdAt: new Date()
         },
         {
@@ -85,6 +86,7 @@ export class FileStorage implements IStorage {
           imageUrl: "https://res.cloudinary.com/practicaldev/image/fetch/s--8K4bwQQE--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ml-pipeline.png",
           publishedAt: new Date('2024-02-01'),
           featured: true,
+          sortOrder: 1,
           createdAt: new Date()
         }
       ];
@@ -103,6 +105,7 @@ export class FileStorage implements IStorage {
           imageUrl: "https://images.credly.com/size/220x220/images/778bde6c-ad1c-4312-ac33-2fa40d50a147/image.png",
           description: "AWS AI Practitioner certification demonstrating foundational knowledge of AI/ML services",
           featured: true,
+          sortOrder: 0,
           createdAt: new Date()
         },
         {
@@ -113,6 +116,7 @@ export class FileStorage implements IStorage {
           imageUrl: "https://images.credly.com/size/220x220/images/28944969-813a-43b9-944f-7910111ce764/Professional_Certificate_-_Data_Science.png",
           description: "IBM certification in data analysis using Python",
           featured: true,
+          sortOrder: 1,
           createdAt: new Date()
         }
       ];
@@ -129,6 +133,7 @@ export class FileStorage implements IStorage {
           category: "Programming",
           logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
           featured: true,
+          sortOrder: 0,
           createdAt: new Date()
         },
         {
@@ -137,6 +142,7 @@ export class FileStorage implements IStorage {
           category: "Machine Learning",
           logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
           featured: true,
+          sortOrder: 1,
           createdAt: new Date()
         },
         {
@@ -145,6 +151,7 @@ export class FileStorage implements IStorage {
           category: "Cloud",
           logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg",
           featured: true,
+          sortOrder: 2,
           createdAt: new Date()
         }
       ];
@@ -240,12 +247,13 @@ export class FileStorage implements IStorage {
 
   // Certification methods
   async getCertifications(): Promise<Certification[]> {
-    return await this.readJsonFile<Certification[]>('certifications.json', []);
+    const certifications = await this.readJsonFile<Certification[]>('certifications.json', []);
+    return certifications.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async getFeaturedCertifications(): Promise<Certification[]> {
     const certifications = await this.getCertifications();
-    return certifications.filter(cert => cert.featured);
+    return certifications.filter(cert => cert.featured).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async createCertification(insertCert: InsertCertification): Promise<Certification> {
@@ -256,6 +264,7 @@ export class FileStorage implements IStorage {
       imageUrl: insertCert.imageUrl ?? null,
       description: insertCert.description ?? null,
       featured: insertCert.featured ?? false,
+      sortOrder: insertCert.sortOrder ?? 0,
       id: newId,
       createdAt: new Date()
     };
@@ -308,12 +317,12 @@ export class FileStorage implements IStorage {
   // LinkedIn Post methods
   async getLinkedinPosts(): Promise<LinkedinPost[]> {
     const posts = await this.readJsonFile<LinkedinPost[]>('linkedinPosts.json', []);
-    return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    return posts.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async getFeaturedLinkedinPosts(): Promise<LinkedinPost[]> {
     const posts = await this.getLinkedinPosts();
-    return posts.filter(post => post.featured);
+    return posts.filter(post => post.featured).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async createLinkedinPost(insertPost: InsertLinkedinPost): Promise<LinkedinPost> {
@@ -325,6 +334,7 @@ export class FileStorage implements IStorage {
       likes: insertPost.likes ?? 0,
       comments: insertPost.comments ?? 0,
       featured: insertPost.featured ?? false,
+      sortOrder: insertPost.sortOrder ?? 0,
       id: newId,
       createdAt: new Date()
     };
@@ -376,12 +386,13 @@ export class FileStorage implements IStorage {
 
   // Skill methods
   async getSkills(): Promise<Skill[]> {
-    return await this.readJsonFile<Skill[]>('skills.json', []);
+    const skills = await this.readJsonFile<Skill[]>('skills.json', []);
+    return skills.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async getFeaturedSkills(): Promise<Skill[]> {
     const skills = await this.getSkills();
-    return skills.filter(skill => skill.featured);
+    return skills.filter(skill => skill.featured).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async createSkill(insertSkill: InsertSkill): Promise<Skill> {
@@ -391,6 +402,7 @@ export class FileStorage implements IStorage {
       ...insertSkill,
       logoUrl: insertSkill.logoUrl ?? null,
       featured: insertSkill.featured ?? false,
+      sortOrder: insertSkill.sortOrder ?? 0,
       id: newId,
       createdAt: new Date()
     };
@@ -443,12 +455,12 @@ export class FileStorage implements IStorage {
   // Blog methods
   async getBlogs(): Promise<Blog[]> {
     const blogs = await this.readJsonFile<Blog[]>('blogs.json', []);
-    return blogs.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    return blogs.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async getFeaturedBlogs(): Promise<Blog[]> {
     const blogs = await this.getBlogs();
-    return blogs.filter(blog => blog.featured);
+    return blogs.filter(blog => blog.featured).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async createBlog(insertBlog: InsertBlog): Promise<Blog> {
@@ -459,6 +471,7 @@ export class FileStorage implements IStorage {
       description: insertBlog.description ?? null,
       imageUrl: insertBlog.imageUrl ?? null,
       featured: insertBlog.featured ?? false,
+      sortOrder: insertBlog.sortOrder ?? 0,
       id: newId,
       createdAt: new Date()
     };
@@ -538,7 +551,8 @@ export class FileStorage implements IStorage {
 
   // Education methods
   async getEducation(): Promise<Education[]> {
-    return await this.readJsonFile<Education[]>('education.json', []);
+    const education = await this.readJsonFile<Education[]>('education.json', []);
+    return education.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async createEducation(insertEducation: InsertEducation): Promise<Education> {
@@ -546,6 +560,7 @@ export class FileStorage implements IStorage {
     const newId = Math.max(0, ...educationList.map(e => e.id)) + 1;
     const education: Education = {
       ...insertEducation,
+      sortOrder: insertEducation.sortOrder ?? 0,
       id: newId,
       createdAt: new Date()
     };
@@ -598,7 +613,7 @@ export class FileStorage implements IStorage {
   // Selected Project methods
   async getSelectedProjects(): Promise<SelectedProject[]> {
     const projects = await this.readJsonFile<SelectedProject[]>('selectedProjects.json', []);
-    return projects.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+    return projects.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   }
 
   async createSelectedProject(insertProject: InsertSelectedProject): Promise<SelectedProject> {
@@ -614,7 +629,7 @@ export class FileStorage implements IStorage {
       forksCount: insertProject.forksCount ?? 0,
       isSelected: insertProject.isSelected ?? true,
       featured: insertProject.featured ?? false,
-      displayOrder: insertProject.displayOrder ?? projects.length,
+      sortOrder: insertProject.sortOrder ?? projects.length,
       id: newId,
       createdAt: new Date()
     };

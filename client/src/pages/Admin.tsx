@@ -11,7 +11,8 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { AdminModal } from '@/components/AdminModal';
-import { Plus, Edit, Trash2, Save, Eye, Settings, Link, Calendar, BookOpen, Mail, Github, Linkedin } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, Eye, Settings, Link, Calendar, BookOpen, Mail, Github, Linkedin, GripVertical } from 'lucide-react';
+import { DraggableList, BlogItemRenderer, LinkedinItemRenderer, EducationItemRenderer, SkillItemRenderer, CertificationItemRenderer } from '@/components/DraggableList';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import type { Certification, Skill, LinkedinPost, Project, Blog, ContactInfo, Education, SelectedProject } from '@shared/schema';
 
@@ -568,105 +569,25 @@ export function Admin() {
                 </CardContent>
               </Card>
 
-              {/* Existing Blogs */}
+              {/* Existing Blogs with Drag & Drop */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <BookOpen className="w-5 h-5 mr-2" />
-                    Existing Blog Posts ({(blogs as Blog[] | undefined)?.length || 0})
+                    <GripVertical className="w-5 h-5 mr-2" />
+                    Blog Posts - Drag to Reorder ({(blogs as Blog[] | undefined)?.length || 0})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4 max-h-96 overflow-y-auto">
-                    {(blogs as Blog[] | undefined)?.map((blog) => (
-                      <div key={blog.id} className="border rounded-lg p-4 space-y-2">
-                        {editingBlog?.id === blog.id ? (
-                          <div className="space-y-3">
-                            <Input
-                              value={editingBlog.title}
-                              onChange={(e) => setEditingBlog({...editingBlog, title: e.target.value})}
-                              placeholder="Blog title"
-                            />
-                            <Input
-                              value={editingBlog.url}
-                              onChange={(e) => setEditingBlog({...editingBlog, url: e.target.value})}
-                              placeholder="Blog URL"
-                            />
-                            <Textarea
-                              value={editingBlog.description || ''}
-                              onChange={(e) => setEditingBlog({...editingBlog, description: e.target.value})}
-                              placeholder="Description"
-                              rows={2}
-                            />
-                            <Input
-                              value={editingBlog.imageUrl || ''}
-                              onChange={(e) => setEditingBlog({...editingBlog, imageUrl: e.target.value})}
-                              placeholder="Image URL"
-                            />
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                onClick={() => updateBlogMutation.mutate({ id: blog.id, data: editingBlog })}
-                                disabled={updateBlogMutation.isPending}
-                              >
-                                <Save className="w-4 h-4 mr-1" />
-                                Save
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setEditingBlog(null)}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="flex justify-between items-start">
-                              <h4 className="font-semibold text-sm">{blog.title}</h4>
-                              <div className="flex gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => setEditingBlog(blog)}
-                                >
-                                  <Edit className="w-4 h-4" />
-                                </Button>
-                                <Button
-                                  variant="destructive"
-                                  size="sm"
-                                  onClick={() => handleDeleteBlog(blog.id)}
-                                  disabled={deleteBlogMutation.isPending}
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-300">
-                              {blog.description}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              <Badge variant="outline" className="text-xs">
-                                <Calendar className="w-3 h-3 mr-1" />
-                                {new Date(blog.publishedAt).toLocaleDateString()}
-                              </Badge>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => window.open(blog.url, '_blank')}
-                              >
-                                <Link className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    )) || (
-                      <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-                        No blog posts yet. Add your first blog post!
-                      </p>
-                    )}
+                  <div className="max-h-96 overflow-y-auto">
+                    <DraggableList
+                      items={(blogs as Blog[] | undefined) || []}
+                      renderItem={BlogItemRenderer}
+                      onEdit={(blog) => setEditingBlog(blog as Blog)}
+                      onDelete={handleDeleteBlog}
+                      reorderEndpoint="/api/blogs/reorder"
+                      queryKey={['/api/blogs']}
+                      itemName="Blog Posts"
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -801,60 +722,25 @@ export function Admin() {
                 </CardContent>
               </Card>
 
-              {/* Education List */}
+              {/* Education List with Drag & Drop */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <BookOpen className="w-5 h-5 mr-2" />
-                    Current Education Entries
+                    <GripVertical className="w-5 h-5 mr-2" />
+                    Education Entries - Drag to Reorder ({(education as Education[] | undefined)?.length || 0})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {(education as Education[])?.map((edu) => (
-                      <div key={edu.id} className="p-4 border rounded-lg">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 dark:text-white">
-                              {edu.courseName}
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300">
-                              {edu.collegeName}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {edu.startMonth} {edu.startYear} - {edu.endMonth} {edu.endYear}
-                            </p>
-                            <Badge 
-                              variant={edu.status === 'completed' ? 'default' : 
-                                      edu.status === 'in progress' ? 'secondary' : 
-                                      edu.status === 'to begin' ? 'outline' : 'destructive'}
-                            >
-                              {edu.status}
-                            </Badge>
-                          </div>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditEducation(edu)}
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteEducation(edu.id)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    )) || (
-                      <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-                        No education entries yet. Add your first education!
-                      </p>
-                    )}
+                  <div className="max-h-96 overflow-y-auto">
+                    <DraggableList
+                      items={(education as Education[] | undefined) || []}
+                      renderItem={EducationItemRenderer}
+                      onEdit={(edu) => setEditingEducation(edu as Education)}
+                      onDelete={handleDeleteEducation}
+                      reorderEndpoint="/api/education/reorder"
+                      queryKey={['/api/education']}
+                      itemName="Education Entries"
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -1153,132 +1039,25 @@ export function Admin() {
                 </CardContent>
               </Card>
 
-              {/* Existing LinkedIn Posts */}
+              {/* Existing LinkedIn Posts with Drag & Drop */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <Linkedin className="w-5 h-5 mr-2" />
-                    LinkedIn Posts ({(linkedinPosts as LinkedinPost[] | undefined)?.length || 0})
+                    <GripVertical className="w-5 h-5 mr-2" />
+                    LinkedIn Posts - Drag to Reorder ({(linkedinPosts as LinkedinPost[] | undefined)?.length || 0})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4 max-h-96 overflow-y-auto">
-                    {(linkedinPosts as LinkedinPost[] | undefined)?.map((post) => (
-                      <div key={post.id} className="border rounded-lg p-4 space-y-2">
-                        {editingLinkedinPost?.id === post.id ? (
-                          <div className="space-y-3">
-                            <Textarea
-                              value={editingLinkedinPost.content}
-                              onChange={(e) => setEditingLinkedinPost({...editingLinkedinPost, content: e.target.value})}
-                              placeholder="Post content"
-                              rows={3}
-                            />
-                            <Input
-                              value={editingLinkedinPost.postUrl}
-                              onChange={(e) => setEditingLinkedinPost({...editingLinkedinPost, postUrl: e.target.value})}
-                              placeholder="LinkedIn post URL"
-                            />
-                            <Input
-                              value={editingLinkedinPost.imageUrl || ''}
-                              onChange={(e) => setEditingLinkedinPost({...editingLinkedinPost, imageUrl: e.target.value})}
-                              placeholder="Image URL (optional)"
-                            />
-                            <div className="flex items-center space-x-2">
-                              <Switch
-                                checked={editingLinkedinPost.featured || false}
-                                onCheckedChange={(checked) => setEditingLinkedinPost({...editingLinkedinPost, featured: checked})}
-                              />
-                              <Label>Feature on Home Page</Label>
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                onClick={() => updateLinkedinPostMutation.mutate({ id: post.id, data: editingLinkedinPost })}
-                                disabled={updateLinkedinPostMutation.isPending}
-                              >
-                                <Save className="w-4 h-4 mr-1" />
-                                Save
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setEditingLinkedinPost(null)}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="space-y-3">
-                            <div className="flex gap-3">
-                              {post.imageUrl && (
-                                <div className="flex-shrink-0">
-                                  <img
-                                    src={post.imageUrl}
-                                    alt={post.title}
-                                    className="w-16 h-16 object-cover rounded-lg border"
-                                    onError={(e) => {
-                                      const target = e.target as HTMLImageElement;
-                                      target.style.display = 'none';
-                                    }}
-                                  />
-                                </div>
-                              )}
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-medium text-gray-900 dark:text-white mb-1 truncate">
-                                  {post.title}
-                                </h4>
-                                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                                  {post.content}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                {post.featured && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    Featured
-                                  </Badge>
-                                )}
-                                {post.imageUrl && (
-                                  <Badge variant="outline" className="text-xs">
-                                    Has Image
-                                  </Badge>
-                                )}
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => window.open(post.postUrl, '_blank')}
-                                >
-                                  <Link className="w-4 h-4" />
-                                </Button>
-                              </div>
-                              <div className="flex gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => setEditingLinkedinPost(post)}
-                                >
-                                  <Edit className="w-4 h-4" />
-                                </Button>
-                                <Button
-                                  variant="destructive"
-                                  size="sm"
-                                  onClick={() => handleDeleteLinkedinPost(post.id)}
-                                  disabled={deleteLinkedinPostMutation.isPending}
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )) || (
-                      <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-                        No LinkedIn posts yet. Add your first post!
-                      </p>
-                    )}
+                  <div className="max-h-96 overflow-y-auto">
+                    <DraggableList
+                      items={(linkedinPosts as LinkedinPost[] | undefined) || []}
+                      renderItem={LinkedinItemRenderer}
+                      onEdit={(post) => setEditingLinkedinPost(post as LinkedinPost)}
+                      onDelete={handleDeleteLinkedinPost}
+                      reorderEndpoint="/api/linkedin-posts/reorder"
+                      queryKey={['/api/linkedin-posts']}
+                      itemName="LinkedIn Posts"
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -1426,77 +1205,27 @@ function SkillsManager() {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {skills?.map((skill) => (
-          <Card key={skill.id} className="relative">
-            <CardContent className="p-4">
-              {editingSkill?.id === skill.id ? (
-                <div className="space-y-3">
-                  <Input
-                    value={editingSkill.name}
-                    onChange={(e) => setEditingSkill({ ...editingSkill, name: e.target.value })}
-                    placeholder="Skill name"
-                  />
-                  <Input
-                    value={editingSkill.category}
-                    onChange={(e) => setEditingSkill({ ...editingSkill, category: e.target.value })}
-                    placeholder="Category"
-                  />
-                  <Input
-                    value={editingSkill.logoUrl || ''}
-                    onChange={(e) => setEditingSkill({ ...editingSkill, logoUrl: e.target.value })}
-                    placeholder="Logo URL"
-                  />
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={editingSkill.featured || false}
-                      onCheckedChange={(featured) => setEditingSkill({ ...editingSkill, featured })}
-                    />
-                    <Label>Featured</Label>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => handleUpdateSkill(editingSkill)}>
-                      <Save className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditingSkill(null)}>
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    {skill.logoUrl && (
-                      <img src={skill.logoUrl} alt={skill.name} className="w-6 h-6" />
-                    )}
-                    <div>
-                      <h3 className="font-semibold">{skill.name}</h3>
-                      <p className="text-sm text-gray-500">{skill.category}</p>
-                    </div>
-                  </div>
-                  {skill.featured && (
-                    <span className="inline-block px-2 py-1 text-xs bg-primary text-white rounded">
-                      Featured
-                    </span>
-                  )}
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => setEditingSkill(skill)}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="destructive" 
-                      onClick={() => handleDeleteSkill(skill.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <GripVertical className="w-5 h-5 mr-2" />
+            Skills - Drag to Reorder ({(skills || []).length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="max-h-96 overflow-y-auto">
+            <DraggableList
+              items={(skills || [])}
+              renderItem={SkillItemRenderer}
+              onEdit={(skill) => setEditingSkill(skill as Skill)}
+              onDelete={handleDeleteSkill}
+              reorderEndpoint="/api/skills/reorder"
+              queryKey={['/api/skills']}
+              itemName="Skills"
+            />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -1653,96 +1382,27 @@ function CertificationsManager() {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {certifications?.map((cert) => (
-          <Card key={cert.id} className="relative">
-            <CardContent className="p-6">
-              {editingCert?.id === cert.id ? (
-                <div className="space-y-4">
-                  <Input
-                    value={editingCert.title}
-                    onChange={(e) => setEditingCert({ ...editingCert, title: e.target.value })}
-                    placeholder="Certification title"
-                  />
-                  <Input
-                    value={editingCert.issuer}
-                    onChange={(e) => setEditingCert({ ...editingCert, issuer: e.target.value })}
-                    placeholder="Issuer"
-                  />
-                  <Input
-                    value={editingCert.year}
-                    onChange={(e) => setEditingCert({ ...editingCert, year: e.target.value })}
-                    placeholder="Year"
-                  />
-                  <Input
-                    value={editingCert.imageUrl || ''}
-                    onChange={(e) => setEditingCert({ ...editingCert, imageUrl: e.target.value })}
-                    placeholder="Image URL"
-                  />
-                  <Textarea
-                    value={editingCert.description || ''}
-                    onChange={(e) => setEditingCert({ ...editingCert, description: e.target.value })}
-                    placeholder="Description"
-                    rows={3}
-                  />
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={editingCert.featured || false}
-                      onCheckedChange={(featured) => setEditingCert({ ...editingCert, featured })}
-                    />
-                    <Label>Featured</Label>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => handleUpdateCertification(editingCert)}>
-                      <Save className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditingCert(null)}>
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="flex items-start gap-4 mb-4">
-                    {cert.imageUrl && (
-                      <img 
-                        src={cert.imageUrl} 
-                        alt={cert.title}
-                        className="w-16 h-16 rounded-lg object-cover"
-                      />
-                    )}
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg">{cert.title}</h3>
-                      <p className="text-primary font-medium">{cert.issuer}</p>
-                      <p className="text-sm text-gray-500">{cert.year}</p>
-                      {cert.description && (
-                        <p className="text-sm text-gray-600 mt-2">{cert.description}</p>
-                      )}
-                      {cert.featured && (
-                        <span className="inline-block px-2 py-1 text-xs bg-primary text-white rounded mt-2">
-                          Featured
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => setEditingCert(cert)}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="destructive" 
-                      onClick={() => handleDeleteCertification(cert.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <GripVertical className="w-5 h-5 mr-2" />
+            Certifications - Drag to Reorder ({(certifications || []).length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="max-h-96 overflow-y-auto">
+            <DraggableList
+              items={(certifications || [])}
+              renderItem={CertificationItemRenderer}
+              onEdit={(cert) => setEditingCert(cert as Certification)}
+              onDelete={handleDeleteCertification}
+              reorderEndpoint="/api/certifications/reorder"
+              queryKey={['/api/certifications']}
+              itemName="Certifications"
+            />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
